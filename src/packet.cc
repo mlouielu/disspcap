@@ -32,7 +32,8 @@ Packet::Packet(uint8_t *data, unsigned int length)
       dns_{ nullptr },
       http_{ nullptr },
       irc_{ nullptr },
-      telnet_{ nullptr }
+      telnet_{ nullptr },
+      dca_config_{ nullptr }
 {
     if (!data) {
         return;
@@ -61,7 +62,8 @@ Packet::Packet(uint8_t *data, unsigned int length, struct timeval ts)
       dns_{ nullptr },
       http_{ nullptr },
       irc_{ nullptr },
-      telnet_{ nullptr }
+      telnet_{ nullptr },
+      dca_config_{ nullptr }
 {
     if (!data) {
         return;
@@ -103,6 +105,9 @@ Packet::~Packet()
 
     if (this->telnet_)
         delete this->telnet_;
+
+    if (this->dca_config_)
+        delete this->dca_config_;
 }
 
 /**
@@ -235,6 +240,12 @@ const Telnet *Packet::telnet() const
     return this->telnet_;
 }
 
+const DcaConfig *Packet::dca_config() const
+{
+    return this->dca_config_;
+}
+
+
 const std::chrono::system_clock::time_point *Packet::ts() const
 {
     return &this->ts_;
@@ -278,51 +289,11 @@ void Packet::parse()
         this->udp_ = new UDP(this->payload_);
         this->payload_ = this->udp_->payload();
         this->payload_length_ = this->udp_->payload_length();
-    } else if (next_header == "TCP") {
-        this->tcp_ = new TCP(this->payload_, this->payload_length_);
-        this->payload_ = this->tcp_->payload();
-        this->payload_length_ =
-            this->payload_length_ - this->tcp_->data_offset() * 4;
-    }
 
-    if (this->udp_) {
-        if (this->udp_->source_port() == 53 ||
-            this->udp_->destination_port() == 53) {
-            /* DNS */
-            this->dns_ = new DNS(this->payload_, this->payload_length_);
-        }
-    }
-
-    if (this->tcp_) {
-        if (this->tcp_->source_port() == 53 ||
-            this->tcp_->destination_port() == 53) {
-            /* DNS */
-            uint16_t dns_length = this->payload_[0];
-            dns_length <<= 8;
-            dns_length += this->payload_[1];
-
-            if (dns_length <= this->payload_length_) {
-                this->dns_ =
-                    new DNS(this->payload_ + 2, this->payload_length_ - 2);
-            }
-        }
-
-        if (this->tcp_->source_port() == 80 ||
-            this->tcp_->destination_port() == 80) {
-            /* HTTP */
-            this->http_ = new HTTP(this->payload_, this->payload_length_);
-        }
-
-        if (this->tcp_->source_port() == 6667 ||
-            this->tcp_->destination_port() == 6667) {
-            /* IRC */
-            this->irc_ = new IRC(this->payload_, this->payload_length_);
-        }
-
-        if (this->tcp_->source_port() == 23 ||
-            this->tcp_->destination_port() == 23) {
-            /* Telnet */
-            this->telnet_ = new Telnet(this->payload_, this->payload_length_);
+        /* Treat as DCA Config */
+        if (this->payload_length_ == 8) {
+            this->dca_config_ =
+                new DcaConfig(this->payload_, this->payload_length_);
         }
     }
 }

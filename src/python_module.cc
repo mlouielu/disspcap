@@ -13,6 +13,7 @@
 #include <pybind11/stl.h>
 
 #include "common.h"
+#include "dca_config.h"
 #include "dns.h"
 #include "ethernet.h"
 #include "http.h"
@@ -144,6 +145,12 @@ PYBIND11_MODULE(disspcap, m)
             return py::bytes((char *) bytes, tcp.payload_length());
         });
 
+    py::class_<DcaConfig>(m, "DcaConfig")
+        .def_property_readonly("header", &DcaConfig::header)
+        .def_property_readonly("cmd", &DcaConfig::cmd)
+        .def_property_readonly("status", &DcaConfig::status)
+        .def_property_readonly("footer", &DcaConfig::footer);
+
     py::class_<Packet>(m, "Packet")
         .def_property_readonly("ts", &Packet::ts)
         .def_property_readonly("ethernet", &Packet::ethernet)
@@ -154,7 +161,8 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("dns", &Packet::dns)
         .def_property_readonly("http", &Packet::http)
         .def_property_readonly("irc", &Packet::irc)
-        .def_property_readonly("telnet", &Packet::telnet);
+        .def_property_readonly("telnet", &Packet::telnet)
+        .def_property_readonly("dca_config", &Packet::dca_config);
 
     py::class_<Pcap>(m, "Pcap")
         .def(py::init())

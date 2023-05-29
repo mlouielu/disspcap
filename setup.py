@@ -42,6 +42,7 @@ ext_modules = [
             'src/tcp.cc',
             'src/udp.cc',
             'src/dns.cc',
+            'src/dca_config.cc',
             'src/http.cc',
             'src/irc.cc',
             'src/telnet.cc',
