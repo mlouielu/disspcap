@@ -151,6 +151,18 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("status", &DcaConfig::status)
         .def_property_readonly("footer", &DcaConfig::footer);
 
+    py::class_<DcaRaw>(m, "DcaRaw")
+        .def_property_readonly("seq_id", &DcaRaw::seq_id)
+        .def_property_readonly("byte_count", &DcaRaw::byte_count)
+        .def_property_readonly("payload", [](DcaRaw &raw) {
+            uint8_t *bytes = raw.payload();
+            if (bytes == nullptr) {
+                return py::bytes("");
+            }
+
+            return py::bytes((char *) bytes, raw.payload_length());
+        });
+
     py::class_<Packet>(m, "Packet")
         .def_property_readonly("ts", &Packet::ts)
         .def_property_readonly("ethernet", &Packet::ethernet)
@@ -162,7 +174,8 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("http", &Packet::http)
         .def_property_readonly("irc", &Packet::irc)
         .def_property_readonly("telnet", &Packet::telnet)
-        .def_property_readonly("dca_config", &Packet::dca_config);
+        .def_property_readonly("dca_config", &Packet::dca_config)
+        .def_property_readonly("dca_raw", &Packet::dca_raw);
 
     py::class_<Pcap>(m, "Pcap")
         .def(py::init())

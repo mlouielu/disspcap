@@ -33,7 +33,8 @@ Packet::Packet(uint8_t *data, unsigned int length)
       http_{ nullptr },
       irc_{ nullptr },
       telnet_{ nullptr },
-      dca_config_{ nullptr }
+      dca_config_{ nullptr },
+      dca_raw_{ nullptr }
 {
     if (!data) {
         return;
@@ -63,7 +64,8 @@ Packet::Packet(uint8_t *data, unsigned int length, struct timeval ts)
       http_{ nullptr },
       irc_{ nullptr },
       telnet_{ nullptr },
-      dca_config_{ nullptr }
+      dca_config_{ nullptr },
+      dca_raw_{ nullptr }
 {
     if (!data) {
         return;
@@ -108,6 +110,9 @@ Packet::~Packet()
 
     if (this->dca_config_)
         delete this->dca_config_;
+
+    if (this->dca_raw_)
+        delete this->dca_raw_;
 }
 
 /**
@@ -245,6 +250,10 @@ const DcaConfig *Packet::dca_config() const
     return this->dca_config_;
 }
 
+const DcaRaw *Packet::dca_raw() const
+{
+    return this->dca_raw_;
+}
 
 const std::chrono::system_clock::time_point *Packet::ts() const
 {
@@ -290,10 +299,12 @@ void Packet::parse()
         this->payload_ = this->udp_->payload();
         this->payload_length_ = this->udp_->payload_length();
 
-        /* Treat as DCA Config */
+        /* Treat as DCA Config or DCA Raw */
         if (this->payload_length_ == 8) {
             this->dca_config_ =
                 new DcaConfig(this->payload_, this->payload_length_);
+        } else if (this->payload_length_ >= 10) {
+            this->dca_raw_ = new DcaRaw(this->payload_, this->payload_length_);
         }
     }
 }

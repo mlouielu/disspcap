@@ -17,6 +17,7 @@
 #include <string>
 
 #include "dca_config.h"
+#include "dca_raw.h"
 #include "dns.h"
 #include "ethernet.h"
 #include "http.h"
@@ -51,6 +52,7 @@ public:
     const IRC *irc() const;
     const Telnet *telnet() const;
     const DcaConfig *dca_config() const;
+    const DcaRaw *dca_raw() const;
     const std::chrono::system_clock::time_point *ts() const;
     uint8_t *raw_data();
     uint8_t *payload();
@@ -71,6 +73,7 @@ private:
     IRC *irc_;
     Telnet *telnet_;
     DcaConfig *dca_config_;
+    DcaRaw *dca_raw_;
     void parse();
 };
 }  // namespace disspcap
