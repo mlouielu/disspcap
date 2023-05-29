@@ -4,9 +4,9 @@
  * @brief Live capture of packets.
  * @version 0.1
  * @date 2018-11-16
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://www.tcpdump.org/pcap.html
  */
@@ -18,7 +18,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new Live Sniffer:: Live Sniffer object.
- * 
+ *
  * @param interface Interface name.
  */
 LiveSniffer::LiveSniffer() : last_header_{ new struct pcap_pkthdr } {}
@@ -51,7 +51,7 @@ void LiveSniffer::stop_sniffing()
 
 /**
  * @brief Reads next packet from interface.
- * 
+ *
  * @return std::unique_ptr<Packet> Next packet object.
  */
 std::unique_ptr<Packet> LiveSniffer::next_packet()
@@ -68,7 +68,7 @@ std::unique_ptr<Packet> LiveSniffer::next_packet()
 
 /**
  * @brief Returns length of last captured packet.
- * 
+ *
  * @return int Packet length.
  */
 int LiveSniffer::last_packet_length() const

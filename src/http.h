@@ -4,9 +4,9 @@
  * @brief HTTP protocol related.
  * @version 0.1
  * @date 2019-03-10
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2616
  */

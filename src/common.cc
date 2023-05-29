@@ -4,7 +4,7 @@
  * @brief Common functions for disspcap library.
  * @version 0.1
  * @date 2018-12-10
- * 
+ *
  * @copyright Copyright (c) 2018
  */
 
@@ -20,7 +20,7 @@ namespace disspcap
 
 /**
  * @brief Reads pcap and returns most common ip address.
- * 
+ *
  * @param pcap_path Path to pcap.
  * @return std::string Most common IP.
  */
@@ -57,7 +57,7 @@ std::string most_common_ip(std::string pcap_path)
 
 /**
  * @brief Constructs hexadecimal representation string.
- * 
+ *
  * @param number Number to represent.
  * @return std::string String - e.g. "\x98".
  */

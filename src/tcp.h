@@ -4,9 +4,9 @@
  * @brief TCP protocol related.
  * @version 0.1
  * @date 2018-11-02
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc793
  * https://tools.ietf.org/html/rfc3168

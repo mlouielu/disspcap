@@ -4,9 +4,9 @@
  * @brief IPv6 protocol related.
  * @version 0.1
  * @date 2018-11-03
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2460
  * https://tools.ietf.org/html/rfc5952

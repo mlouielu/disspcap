@@ -4,9 +4,9 @@
  * @brief IRC protocol related.
  * @version 0.1
  * @date 2019-03-12
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2812
  */
@@ -19,7 +19,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new IRC::IRC object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ IRC).
  * @param data_length Data length.
  */
@@ -31,7 +31,7 @@ IRC::IRC(uint8_t *data, int data_length)
 
 /**
  * @brief IRC messages getter.
- * 
+ *
  * @return const std::vector<struct irc_message> IRC messages.
  */
 const std::vector<struct irc_message> IRC::messages() const
@@ -82,7 +82,7 @@ void IRC::parse()
 
 /**
  * @brief Read next string of IRC data.
- * 
+ *
  * @param limitter String end - default SP.
  * @return std::string Found string.
  */
@@ -110,7 +110,7 @@ std::string IRC::next_string(char limitter)
 
 /**
  * @brief Read next line of IRC data.
- * 
+ *
  * @return std::string Line.
  */
 std::string IRC::next_line()

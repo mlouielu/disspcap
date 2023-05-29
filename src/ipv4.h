@@ -4,9 +4,9 @@
  * @brief IP protocol related.
  * @version 0.1
  * @date 2018-10-25
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc791
  * https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml

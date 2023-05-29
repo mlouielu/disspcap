@@ -4,9 +4,9 @@
  * @brief TCP related.
  * @version 0.1
  * @date 2018-11-02
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc793
  * https://tools.ietf.org/html/rfc3168
@@ -22,7 +22,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new TCP::TCP object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ TCP).
  */
 TCP::TCP(uint8_t *data, unsigned int data_length)
@@ -46,7 +46,7 @@ TCP::~TCP()
 
 /**
  * @brief Getter of source port value.
- * 
+ *
  * @return unsigned int TCP source port.
  */
 unsigned int TCP::source_port() const
@@ -56,7 +56,7 @@ unsigned int TCP::source_port() const
 
 /**
  * @brief Getter of destination port value.
- * 
+ *
  * @return unsigned int TCP destination port.
  */
 unsigned int TCP::destination_port() const
@@ -66,7 +66,7 @@ unsigned int TCP::destination_port() const
 
 /**
  * @brief Getter of sequence number value.
- * 
+ *
  * @return unsigned int Sequence number.
  */
 unsigned int TCP::seq_number() const
@@ -76,7 +76,7 @@ unsigned int TCP::seq_number() const
 
 /**
  * @brief Getter of acknowledgement number value.
- * 
+ *
  * @return unsigned int Acknowledgement number.
  */
 unsigned int TCP::ack_number() const
@@ -86,7 +86,7 @@ unsigned int TCP::ack_number() const
 
 /**
  * @brief Getter of checksum value.
- * 
+ *
  * @return unsigned int TCP header checksum.
  */
 unsigned int TCP::checksum() const
@@ -97,7 +97,7 @@ unsigned int TCP::checksum() const
 /**
  * @brief Getter of urgent pointer value.
  * Valid only if urgent control number is set.
- * 
+ *
  * @return unsigned int Urgent pointer.
  */
 unsigned int TCP::urgent_pointer() const
@@ -108,7 +108,7 @@ unsigned int TCP::urgent_pointer() const
 /**
  * @brief Getter of data offset value.
  * Equeals TCP header length.
- * 
+ *
  * @return unsigned int Data offset.
  */
 unsigned int TCP::data_offset() const
@@ -118,7 +118,7 @@ unsigned int TCP::data_offset() const
 
 /**
  * @brief Getter of FLAGS value.
- * 
+ *
  * @return unsigned int bit array from TCP header.
  */
 unsigned int TCP::flags() const
@@ -128,7 +128,7 @@ unsigned int TCP::flags() const
 
 /**
  * @brief Congestion Window Reduced flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -139,7 +139,7 @@ bool TCP::cwr() const
 
 /**
  * @brief ECN-Echo flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -150,7 +150,7 @@ bool TCP::ece() const
 
 /**
  * @brief Urgent flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -161,7 +161,7 @@ bool TCP::urg() const
 
 /**
  * @brief Acknowledgement flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -172,7 +172,7 @@ bool TCP::ack() const
 
 /**
  * @brief Push flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -183,7 +183,7 @@ bool TCP::psh() const
 
 /**
  * @brief Reset flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -194,7 +194,7 @@ bool TCP::rst() const
 
 /**
  * @brief Syn flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -205,7 +205,7 @@ bool TCP::syn() const
 
 /**
  * @brief Fin flag.
- * 
+ *
  * @return true Flag set.
  * @return false Flag not set.
  */
@@ -216,7 +216,7 @@ bool TCP::fin() const
 
 /**
  * @brief Getter of payload.
- * 
+ *
  * @return const uint8_t* Pointer to first byte of payload.
  */
 uint8_t *TCP::payload()
@@ -226,7 +226,7 @@ uint8_t *TCP::payload()
 
 /**
  * @brief Getter of payload length value.
- * 
+ *
  * @return unsigned int Length of payload.
  */
 unsigned int TCP::payload_length() const

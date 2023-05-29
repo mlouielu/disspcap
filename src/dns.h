@@ -4,10 +4,10 @@
  * @brief DNS protocol related.
  * @version 0.1
  * @date 2018-11-16
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
- * Based on: 
+ *
+ * Based on:
  * https://www.ietf.org/rfc/rfc1035.txt
  */
 

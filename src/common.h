@@ -4,7 +4,7 @@
  * @brief Common functions for disspcap library.
  * @version 0.1
  * @date 2018-12-10
- * 
+ *
  * @copyright Copyright (c) 2018
  */
 

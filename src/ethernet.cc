@@ -4,7 +4,7 @@
  * @brief Ethernet protocol related.
  * @version 0.1
  * @date 2018-10-24
- * 
+ *
  * @copyright Copyright (c) 2018
  */
 
@@ -17,7 +17,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new Ethernet:: Ethernet object and runs parser.
- * 
+ *
  * @param data Packets data.
  */
 Ethernet::Ethernet(uint8_t *data)
@@ -28,7 +28,7 @@ Ethernet::Ethernet(uint8_t *data)
 
 /**
  * @brief Getter of destination value.
- * 
+ *
  * @return const std::string& Destination MAC address.
  */
 const std::string &Ethernet::destination() const
@@ -38,7 +38,7 @@ const std::string &Ethernet::destination() const
 
 /**
  * @brief Getter of source value.
- * 
+ *
  * @return const std::string& Source MAC address.
  */
 const std::string &Ethernet::source() const
@@ -48,7 +48,7 @@ const std::string &Ethernet::source() const
 
 /**
  * @brief Getter of type value. (IPv4, IPv6, ARP...)
- * 
+ *
  * @return const std::string& Type of packet.
  */
 const std::string &Ethernet::type() const
@@ -58,7 +58,7 @@ const std::string &Ethernet::type() const
 
 /**
  * @brief Returns pointer to data where next_header / payload begins.
- * 
+ *
  * @return uint8_t* Pointer to payload data.
  */
 uint8_t *Ethernet::payload() const
@@ -129,7 +129,7 @@ void Ethernet::handle_vlan()
 
 /**
  * @brief Converts uint8_t* to string MAC address.
- * 
+ *
  * @param n Array of uint8_t.
  * @return std::string String representation of MAC address.
  */

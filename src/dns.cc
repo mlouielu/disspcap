@@ -4,9 +4,9 @@
  * @brief DNS protocol related.
  * @version 0.1
  * @date 2018-11-16
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://www.ietf.org/rfc/rfc1035.txt
  * https://www.ietf.org/rfc/rfc4034.txt
@@ -24,7 +24,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new DNS::DNS object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ DNS).
  * @param data_length Data length.
  */
@@ -40,7 +40,7 @@ DNS::DNS(uint8_t *data, int data_length)
 
 /**
  * @brief Incomplete information packet getter.
- * 
+ *
  * @return true Incomplete packet.
  * @return false Complete packet.
  */
@@ -51,7 +51,7 @@ bool DNS::is_incomplete() const
 
 /**
  * @brief Getter of query x response value.
- * 
+ *
  * @return unsigned int 0 for query, 1 for response.
  */
 unsigned int DNS::qr() const
@@ -61,7 +61,7 @@ unsigned int DNS::qr() const
 
 /**
  * @brief Getter of number of entries in question section.
- * 
+ *
  * @return unsigned int Number of entries.
  */
 unsigned int DNS::question_count() const
@@ -71,7 +71,7 @@ unsigned int DNS::question_count() const
 
 /**
  * @brief Getter of number of entries in answer section.
- * 
+ *
  * @return unsigned int Number of entries.
  */
 unsigned int DNS::answer_count() const
@@ -81,7 +81,7 @@ unsigned int DNS::answer_count() const
 
 /**
  * @brief Getter of number of entries in authority section.
- * 
+ *
  * @return unsigned int Number of entries.
  */
 unsigned int DNS::authority_count() const
@@ -91,7 +91,7 @@ unsigned int DNS::authority_count() const
 
 /**
  * @brief Getter of number of entries in additional section.
- * 
+ *
  * @return unsigned int Number of entries.
  */
 unsigned int DNS::additional_count() const
@@ -101,7 +101,7 @@ unsigned int DNS::additional_count() const
 
 /**
  * @brief Getter of questions.
- * 
+ *
  * @return const std::vector<std::string>& Parsed questions.
  */
 const std::vector<std::string> &DNS::questions() const
@@ -111,7 +111,7 @@ const std::vector<std::string> &DNS::questions() const
 
 /**
  * @brief Getter of answers.
- * 
+ *
  * @return const std::vector<std::string>& Parsed answers.
  */
 const std::vector<std::string> &DNS::answers() const
@@ -121,7 +121,7 @@ const std::vector<std::string> &DNS::answers() const
 
 /**
  * @brief Getter of authoritative nameservers.
- * 
+ *
  * @return const std::vector<std::string>& Parsed nameservers RRs.
  */
 const std::vector<std::string> &DNS::authoritatives() const
@@ -131,7 +131,7 @@ const std::vector<std::string> &DNS::authoritatives() const
 
 /**
  * @brief Getter of additionals resource records.
- * 
+ *
  * @return const std::vector<std::string>& Parsed additoinal RRs.
  */
 const std::vector<std::string> &DNS::additionals() const
@@ -258,7 +258,7 @@ void DNS::parse()
 
 /**
  * @brief Parses domain names.
- * 
+ *
  * @return std::string String representation of domain name.
  */
 std::string DNS::parse_name(uint8_t *ptr)
@@ -339,7 +339,7 @@ std::string DNS::parse_name(uint8_t *ptr)
 
 /**
  * @brief Parses type.
- * 
+ *
  * @param type Type of RR.
  * @return std::string String representation of type. (e.g. A, MX, NS)
  */
@@ -403,7 +403,7 @@ std::string DNS::parse_type(uint16_t type)
 
 /**
  * @brief Parses data of resource record.
- * 
+ *
  * @param type Type of RR.
  * @return std::string String representation of data.
  */
@@ -654,7 +654,7 @@ std::string DNS::parse_rdata(uint16_t type, uint16_t length)
 
 /**
  * @brief Parses DNSSEC algorithm field.
- * 
+ *
  * @param algorithm 8-bit algorithm field.
  * @return std::string String representation of algorithm.
  */
@@ -702,9 +702,9 @@ std::string DNS::parse_dnssec_algorithm(uint8_t algorithm)
 
 /**
  * @brief Parses DS digest type.
- * 
+ *
  * @param digest_type 8-bit digest type.
- * @return std::string 
+ * @return std::string
  */
 std::string DNS::parse_digest_type(uint8_t digest_type)
 {

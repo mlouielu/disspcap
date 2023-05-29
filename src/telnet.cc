@@ -4,7 +4,7 @@
  * @brief Telnet protocol related.
  * @version 0.1
  * @date 2019-04-11
- * 
+ *
  * @copyright Copyright (c) 2019
  */
 
@@ -16,7 +16,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new Telnet:: Telnet object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ Telnet).
  * @param data_length Data length.
  */
@@ -35,7 +35,7 @@ Telnet::Telnet(uint8_t *data, int data_length)
 
 /**
  * @brief Is Telnet packet command.
- * 
+ *
  * @return true Command
  * @return false Data.
  */
@@ -46,7 +46,7 @@ bool Telnet::is_command() const
 
 /**
  * @brief Is Telnet packet data.
- * 
+ *
  * @return true Data.
  * @return false Command.
  */
@@ -62,7 +62,7 @@ bool Telnet::is_empty() const
 
 /**
  * @brief Telnet data getter.
- * 
+ *
  * @return const Telnet::std::string& Telnet data.
  */
 const std::string &Telnet::data() const

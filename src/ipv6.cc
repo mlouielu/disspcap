@@ -4,9 +4,9 @@
  * @brief IPv6 related.
  * @version 0.1
  * @date 2018-11-03
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2460
  * https://tools.ietf.org/html/rfc5952
@@ -21,7 +21,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new IPv6::IPv6 object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ IPv6).
  */
 IPv6::IPv6(uint8_t *data) : raw_header_{ reinterpret_cast<ipv6_header *>(data) }
@@ -31,7 +31,7 @@ IPv6::IPv6(uint8_t *data) : raw_header_{ reinterpret_cast<ipv6_header *>(data) }
 
 /**
  * @brief Getter for next header value.
- * 
+ *
  * @return const std::string& Next header (or IPv6 option header).
  */
 const std::string &IPv6::next_header() const
@@ -41,7 +41,7 @@ const std::string &IPv6::next_header() const
 
 /**
  * @brief Getter for source address value.
- * 
+ *
  * @return const std::string& Source IPv6 address.
  */
 const std::string &IPv6::source() const
@@ -51,7 +51,7 @@ const std::string &IPv6::source() const
 
 /**
  * @brief Getter for destination address value.
- * 
+ *
  * @return const std::string& Destination IPv6 address.
  */
 const std::string &IPv6::destination() const
@@ -61,7 +61,7 @@ const std::string &IPv6::destination() const
 
 /**
  * @brief Getter for hop limit value.
- * 
+ *
  * @return unsigned int Hop limit.
  */
 unsigned int IPv6::hop_limit() const
@@ -71,7 +71,7 @@ unsigned int IPv6::hop_limit() const
 
 /**
  * @brief Getter of payload length value (see IPv6::payload()).
- * 
+ *
  * @return unsigned int Payload length.
  */
 unsigned int IPv6::payload_length() const
@@ -81,7 +81,7 @@ unsigned int IPv6::payload_length() const
 
 /**
  * @brief Returns pointer to data where next_header / payload begins.
- * 
+ *
  * @return uint8_t* Pointer to payload data.
  */
 uint8_t *IPv6::payload()
@@ -175,7 +175,7 @@ void IPv6::parse()
 
 /**
  * @brief Parses next header value.
- * 
+ *
  * @param next_header Next header 8-bit representation.
  * @return std::string String representation of next header.
  */

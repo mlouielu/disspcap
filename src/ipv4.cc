@@ -4,9 +4,9 @@
  * @brief IP protocol related.
  * @version 0.1
  * @date 2018-10-25
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc791
  * https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml
@@ -71,7 +71,7 @@ unsigned int IPv4::header_length() const
 
 /**
  * @brief Getter of payload length value.
- * 
+ *
  * @return unsigned int Payload length - see IPv4::payload().
  */
 unsigned int IPv4::payload_length() const
@@ -81,7 +81,7 @@ unsigned int IPv4::payload_length() const
 
 /**
  * @brief Returns pointer to data where next_header / payload begins.
- * 
+ *
  * @return uint8_t* Pointer to payload data.
  */
 uint8_t *IPv4::payload()

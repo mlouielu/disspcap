@@ -4,9 +4,9 @@
  * @brief Live capture of packets.
  * @version 0.1
  * @date 2018-11-16
- * 
+ *
  * @copyright Copyright (c) 2018
- * 
+ *
  * Based on:
  * https://www.tcpdump.org/pcap.html
  */

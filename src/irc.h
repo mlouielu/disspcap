@@ -4,9 +4,9 @@
  * @brief IRC protocol related.
  * @version 0.1
  * @date 2019-03-12
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2812
  */

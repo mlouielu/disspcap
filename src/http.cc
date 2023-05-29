@@ -4,9 +4,9 @@
  * @brief HTTP protocol related.
  * @version 0.1
  * @date 2019-03-10
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  * Based on:
  * https://tools.ietf.org/html/rfc2616
  */
@@ -24,7 +24,7 @@ namespace disspcap
 
 /**
  * @brief Construct a new HTTP::HTTP object and runs parser.
- * 
+ *
  * @param data Packets data (starting w/ HTTP).
  * @param data_length Data length.
  */
@@ -52,7 +52,7 @@ HTTP::~HTTP()
 
 /**
  * @brief HTTP message is request.
- * 
+ *
  * @return true Is request.
  * @return false Is not request.
  */
@@ -63,7 +63,7 @@ bool HTTP::is_request() const
 
 /**
  * @brief HTTP message is response.
- * 
+ *
  * @return true Is response.
  * @return false Is not response.
  */
@@ -74,7 +74,7 @@ bool HTTP::is_response() const
 
 /**
  * @brief Contains non ascii characters in headers fields.
- * 
+ *
  * @return true Contains non-ascii.
  * @return false Does not contain non-ascii
  */
@@ -85,7 +85,7 @@ bool HTTP::non_ascii() const
 
 /**
  * @brief Getter of HTTP request method. (GET, POST, ...)
- * 
+ *
  * @return const std::string& Request method.
  */
 const std::string &HTTP::request_method() const
@@ -95,7 +95,7 @@ const std::string &HTTP::request_method() const
 
 /**
  * @brief Getter of request URI.
- * 
+ *
  * @return const std::string& Request URI.
  */
 const std::string &HTTP::request_uri() const
@@ -105,7 +105,7 @@ const std::string &HTTP::request_uri() const
 
 /**
  * @brief Getter of HTTP version.
- * 
+ *
  * @return const std::string& HTTP version (e.g. HTTP/1.1).
  */
 const std::string &HTTP::http_version() const
@@ -115,7 +115,7 @@ const std::string &HTTP::http_version() const
 
 /**
  * @brief Getter of response phrase.
- * 
+ *
  * @return const std::string& Response phrase (e.g. OK).
  */
 const std::string &HTTP::response_phrase() const
@@ -125,7 +125,7 @@ const std::string &HTTP::response_phrase() const
 
 /**
  * @brief Getter of response status code.
- * 
+ *
  * @return const std::string& Status code (e.g. 200, 404, ...).
  */
 const std::string &HTTP::status_code() const
@@ -135,7 +135,7 @@ const std::string &HTTP::status_code() const
 
 /**
  * @brief Getter of HTTP headers.
- * 
+ *
  * @return const std::map<std::string, std::string>  Key:Value pairs of headers.
  */
 const std::map<std::string, std::string> HTTP::headers() const
@@ -145,8 +145,8 @@ const std::map<std::string, std::string> HTTP::headers() const
 
 /**
  * @brief Getter of message body.
- * 
- * @return uint8_t* 
+ *
+ * @return uint8_t*
  */
 uint8_t *HTTP::body()
 {
@@ -155,7 +155,7 @@ uint8_t *HTTP::body()
 
 /**
  * @brief Getter of body length.
- * 
+ *
  * @return unsigned int Body length.
  */
 unsigned int HTTP::body_length() const
@@ -214,7 +214,7 @@ void HTTP::parse()
 
 /**
  * @brief Read next string of HTTP data.
- * 
+ *
  * @param limitter String end - default SP.
  * @return std::string Found string.
  */
@@ -242,7 +242,7 @@ std::string HTTP::next_string(char limitter)
 
 /**
  * @brief Read next line of HTTP data.
- * 
+ *
  * @return std::string Line.
  */
 std::string HTTP::next_line()
@@ -272,7 +272,7 @@ std::string HTTP::next_line()
 
 /**
  * @brief Parses out request method (GET, POST, ...).
- * 
+ *
  * @return std::string HTTP request method.
  */
 std::string HTTP::parse_req_method()
@@ -290,7 +290,7 @@ std::string HTTP::parse_req_method()
 
 /**
  * @brief Parses out protocol version ( e.g. HTTP/1.1).
- * 
+ *
  * @return std::string HTTP protocol version.
  */
 std::string HTTP::parse_protocol()
@@ -308,7 +308,7 @@ std::string HTTP::parse_protocol()
 
 /**
  * @brief Parses out headers information.
- * 
+ *
  * Fills this->headers_ map.
  */
 void HTTP::parse_headers()
