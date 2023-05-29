@@ -11,7 +11,8 @@
 #include "telnet.h"
 #include "common.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new Telnet:: Telnet object and runs parser.
@@ -19,12 +20,12 @@ namespace disspcap {
  * @param data Packets data (starting w/ Telnet).
  * @param data_length Data length.
  */
-Telnet::Telnet(uint8_t* data, int data_length)
-    : is_command_{ false }
-    , data_{ "" }
-    , ptr_{ data }
-    , base_ptr_{ data }
-    , end_ptr_{ data + data_length }
+Telnet::Telnet(uint8_t *data, int data_length)
+    : is_command_{ false },
+      data_{ "" },
+      ptr_{ data },
+      base_ptr_{ data },
+      end_ptr_{ data + data_length }
 {
     if (!data || data_length < 1)
         return;
@@ -64,7 +65,7 @@ bool Telnet::is_empty() const
  * 
  * @return const Telnet::std::string& Telnet data.
  */
-const std::string& Telnet::data() const
+const std::string &Telnet::data() const
 {
     return this->data_;
 }
@@ -92,7 +93,7 @@ void Telnet::parse()
  */
 void Telnet::parse_data()
 {
-    for (uint8_t* p = this->ptr_; p < this->end_ptr_; ++p) {
+    for (uint8_t *p = this->ptr_; p < this->end_ptr_; ++p) {
         unsigned char repr = static_cast<unsigned char>(*p);
 
         if (isprint(repr) or isspace(repr)) {
@@ -102,4 +103,4 @@ void Telnet::parse_data()
         }
     }
 }
-}
+}  // namespace disspcap

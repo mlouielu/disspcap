@@ -14,48 +14,48 @@
 #ifndef DISSPCAP_HTTP_H
 #define DISSPCAP_HTTP_H
 
-#include <map>
 #include <stdint.h>
+#include <map>
 #include <string>
 #include <vector>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Request methods.
  */
-const std::vector<std::string> REQ_METHODS = {
-    "OPTIONS", "GET", "HEAD", "POST", "PUT",
-    "DELETE", "TRACE", "CONNECT"
-};
+const std::vector<std::string> REQ_METHODS = { "OPTIONS", "GET",    "HEAD",
+                                               "POST",    "PUT",    "DELETE",
+                                               "TRACE",   "CONNECT" };
 
 /**
  * @brief Protocol versions.
  */
-const std::vector<std::string> PROTO_VERSIONS = {
-    "HTTP/0.9", "HTTP/1.0", "HTTP/1.1",
-    "HTTP/2.0", "HTTP/3.0"
-};
+const std::vector<std::string> PROTO_VERSIONS = { "HTTP/0.9", "HTTP/1.0",
+                                                  "HTTP/1.1", "HTTP/2.0",
+                                                  "HTTP/3.0" };
 
 std::string string_hexa(unsigned char);
 
 /**
  * @brief HTTP class holding HTTP related information.
  */
-class HTTP {
+class HTTP
+{
 public:
-    HTTP(uint8_t* data, int data_length);
+    HTTP(uint8_t *data, int data_length);
     ~HTTP();
     bool is_request() const;
     bool is_response() const;
     bool non_ascii() const;
-    const std::string& request_method() const;
-    const std::string& request_uri() const;
-    const std::string& http_version() const;
-    const std::string& response_phrase() const;
-    const std::string& status_code() const;
+    const std::string &request_method() const;
+    const std::string &request_uri() const;
+    const std::string &http_version() const;
+    const std::string &response_phrase() const;
+    const std::string &status_code() const;
     const std::map<std::string, std::string> headers() const;
-    uint8_t* body();
+    uint8_t *body();
     unsigned int body_length() const;
 
 private:
@@ -66,10 +66,10 @@ private:
     std::string status_code_;
     std::map<std::string, std::string> headers_;
     unsigned int req_res_;
-    uint8_t* ptr_;
-    uint8_t* base_ptr_;
-    uint8_t* end_ptr_;
-    uint8_t* body_;
+    uint8_t *ptr_;
+    uint8_t *base_ptr_;
+    uint8_t *end_ptr_;
+    uint8_t *body_;
     unsigned int body_length_;
     bool non_ascii_;
     void parse();
@@ -79,6 +79,6 @@ private:
     std::string parse_req_method();
     std::string parse_protocol();
 };
-}
+}  // namespace disspcap
 
 #endif

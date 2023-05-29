@@ -13,10 +13,11 @@
 
 #include <string>
 
-namespace disspcap {
+namespace disspcap
+{
 
 std::string most_common_ip(std::string pcap_path);
 std::string string_hexa(unsigned char);
-}
+}  // namespace disspcap
 
 #endif

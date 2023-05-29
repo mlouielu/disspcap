@@ -16,15 +16,15 @@
 
 #include <arpa/inet.h>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new IPv6::IPv6 object and runs parser.
  * 
  * @param data Packets data (starting w/ IPv6).
  */
-IPv6::IPv6(uint8_t* data)
-    : raw_header_{ reinterpret_cast<ipv6_header*>(data) }
+IPv6::IPv6(uint8_t *data) : raw_header_{ reinterpret_cast<ipv6_header *>(data) }
 {
     this->parse();
 }
@@ -34,7 +34,7 @@ IPv6::IPv6(uint8_t* data)
  * 
  * @return const std::string& Next header (or IPv6 option header).
  */
-const std::string& IPv6::next_header() const
+const std::string &IPv6::next_header() const
 {
     return this->next_header_;
 }
@@ -44,7 +44,7 @@ const std::string& IPv6::next_header() const
  * 
  * @return const std::string& Source IPv6 address.
  */
-const std::string& IPv6::source() const
+const std::string &IPv6::source() const
 {
     return this->source_;
 }
@@ -54,7 +54,7 @@ const std::string& IPv6::source() const
  * 
  * @return const std::string& Destination IPv6 address.
  */
-const std::string& IPv6::destination() const
+const std::string &IPv6::destination() const
 {
     return this->destination_;
 }
@@ -84,7 +84,7 @@ unsigned int IPv6::payload_length() const
  * 
  * @return uint8_t* Pointer to payload data.
  */
-uint8_t* IPv6::payload()
+uint8_t *IPv6::payload()
 {
     return this->payload_;
 }
@@ -113,7 +113,8 @@ void IPv6::parse()
 
     /* destination address */
     for (unsigned int i = 0; i < 8; i++) {
-        tmp_addr.__in6_u.__u6_addr16[i] = this->raw_header_->destination_addr[i];
+        tmp_addr.__in6_u.__u6_addr16[i] =
+            this->raw_header_->destination_addr[i];
     }
 
     if (inet_ntop(AF_INET6, &tmp_addr, buf, INET6_ADDRSTRLEN) == nullptr) {
@@ -123,43 +124,46 @@ void IPv6::parse()
     }
 
     /* get through extension headers and set payload */
-    this->payload_        = reinterpret_cast<uint8_t*>(this->raw_header_) + IPV6_LEN;
+    this->payload_ = reinterpret_cast<uint8_t *>(this->raw_header_) + IPV6_LEN;
     this->payload_length_ = ntohs(this->raw_header_->payload_length);
 
     uint8_t next = this->raw_header_->next_header;
-    struct ipv6_hop_by_hop_header* hop_by_hop;
-    struct ipv6_routing_header* routing;
-    struct ipv6_destination_header* destination;
+    struct ipv6_hop_by_hop_header *hop_by_hop;
+    struct ipv6_routing_header *routing;
+    struct ipv6_destination_header *destination;
     unsigned int extension_len;
     unsigned int escape_counter = 0;
 
     while (next != IP_UDP || next != IP_TCP || next != IP_NO_NEXT) {
         switch (next) {
-        case IP_IPV6_HOPOPT:
-            hop_by_hop    = reinterpret_cast<ipv6_hop_by_hop_header*>(this->payload_);
-            extension_len = (hop_by_hop->hdr_ext_len + 1) * 8;
-            next          = hop_by_hop->next_header;
-            this->payload_ += extension_len;
-            this->payload_length_ -= extension_len;
-            break;
-        case IP_IPV6_ROUTE:
-            routing       = reinterpret_cast<ipv6_routing_header*>(this->payload_);
-            extension_len = (routing->hdr_ext_len + 1) * 8;
-            next          = routing->next_header;
-            this->payload_ += extension_len;
-            this->payload_length_ -= extension_len;
-            break;
-        case IP_IPV6_DESTOPT:
-            destination   = reinterpret_cast<ipv6_destination_header*>(this->payload_);
-            extension_len = (destination->hdr_ext_len + 1) * 8;
-            next          = destination->next_header;
-            this->payload_ += extension_len;
-            this->payload_length_ -= extension_len;
-            break;
-        case IP_IPV6_FRAG:
-        default:
-            ++escape_counter;
-            break;
+            case IP_IPV6_HOPOPT:
+                hop_by_hop =
+                    reinterpret_cast<ipv6_hop_by_hop_header *>(this->payload_);
+                extension_len = (hop_by_hop->hdr_ext_len + 1) * 8;
+                next = hop_by_hop->next_header;
+                this->payload_ += extension_len;
+                this->payload_length_ -= extension_len;
+                break;
+            case IP_IPV6_ROUTE:
+                routing =
+                    reinterpret_cast<ipv6_routing_header *>(this->payload_);
+                extension_len = (routing->hdr_ext_len + 1) * 8;
+                next = routing->next_header;
+                this->payload_ += extension_len;
+                this->payload_length_ -= extension_len;
+                break;
+            case IP_IPV6_DESTOPT:
+                destination =
+                    reinterpret_cast<ipv6_destination_header *>(this->payload_);
+                extension_len = (destination->hdr_ext_len + 1) * 8;
+                next = destination->next_header;
+                this->payload_ += extension_len;
+                this->payload_length_ -= extension_len;
+                break;
+            case IP_IPV6_FRAG:
+            default:
+                ++escape_counter;
+                break;
         }
 
         if (escape_counter >= 10)
@@ -177,36 +181,35 @@ void IPv6::parse()
  */
 std::string parse_next_header(uint8_t next_header)
 {
-
     switch (next_header) {
-    case IP_IPV6_HOPOPT:
-        return "IPv6 Hop-by-Hop";
-    case IP_ICMP:
-        return "ICMP";
-    case IP_ICMPV6:
-        return "ICMPv6";
-    case IP_IGMP:
-        return "IGMP";
-    case IP_TCP:
-        return "TCP";
-    case IP_UDP:
-        return "UDP";
-    case IP_IPV6:
-        return "IPv6";
-    case IP_IPV6_ROUTE:
-        return "IPv6 Routing";
-    case IP_IPV6_FRAG:
-        return "IPv6 Fragment";
-    case IP_IPV6_AUTH:
-        return "IPv6 Authentication";
-    case IP_IPV6_DESTOPT:
-        return "IPv6 Destination";
-    case IP_IPV6_MOB:
-        return "IPv6 Mobility";
-    case IP_IPV6_HOSTID:
-        return "IPv6 Host ID";
-    default:
-        return "UNKNOWN";
+        case IP_IPV6_HOPOPT:
+            return "IPv6 Hop-by-Hop";
+        case IP_ICMP:
+            return "ICMP";
+        case IP_ICMPV6:
+            return "ICMPv6";
+        case IP_IGMP:
+            return "IGMP";
+        case IP_TCP:
+            return "TCP";
+        case IP_UDP:
+            return "UDP";
+        case IP_IPV6:
+            return "IPv6";
+        case IP_IPV6_ROUTE:
+            return "IPv6 Routing";
+        case IP_IPV6_FRAG:
+            return "IPv6 Fragment";
+        case IP_IPV6_AUTH:
+            return "IPv6 Authentication";
+        case IP_IPV6_DESTOPT:
+            return "IPv6 Destination";
+        case IP_IPV6_MOB:
+            return "IPv6 Mobility";
+        case IP_IPV6_HOSTID:
+            return "IPv6 Host ID";
+        default:
+            return "UNKNOWN";
     }
 }
-}
+}  // namespace disspcap

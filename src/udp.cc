@@ -16,16 +16,16 @@
 #include <arpa/inet.h>
 #include <cstring>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new UDP::UDP object and runs parser.
  * 
  * @param data Packets data (starting w/ UDP).
  */
-UDP::UDP(uint8_t* data)
-    : raw_header_{ reinterpret_cast<udp_header*>(data) }
-    , base_ptr_{ data }
+UDP::UDP(uint8_t *data)
+    : raw_header_{ reinterpret_cast<udp_header *>(data) }, base_ptr_{ data }
 {
     this->parse();
 }
@@ -95,7 +95,7 @@ unsigned int UDP::payload_length() const
  * 
  * @return uint8_t* Pointer to payload data.
  */
-uint8_t* UDP::payload()
+uint8_t *UDP::payload()
 {
     return this->payload_;
 }
@@ -105,13 +105,14 @@ uint8_t* UDP::payload()
  */
 void UDP::parse()
 {
-    this->source_port_      = ntohs(this->raw_header_->source_port);
+    this->source_port_ = ntohs(this->raw_header_->source_port);
     this->destination_port_ = ntohs(this->raw_header_->destination_port);
-    this->length_           = ntohs(this->raw_header_->length);
-    this->checksum_         = ntohs(this->raw_header_->checksum);
+    this->length_ = ntohs(this->raw_header_->length);
+    this->checksum_ = ntohs(this->raw_header_->checksum);
 
     /* allocate and load payload */
     this->payload_ = new uint8_t[this->payload_length()];
-    std::memcpy(this->payload_, this->base_ptr_ + UDP_LEN, this->payload_length());
+    std::memcpy(this->payload_, this->base_ptr_ + UDP_LEN,
+                this->payload_length());
 }
-}
+}  // namespace disspcap

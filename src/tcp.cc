@@ -17,18 +17,19 @@
 #include <arpa/inet.h>
 #include <cstring>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new TCP::TCP object and runs parser.
  * 
  * @param data Packets data (starting w/ TCP).
  */
-TCP::TCP(uint8_t* data, unsigned int data_length)
-    : data_length_{ data_length }
-    , payload_{ nullptr }
-    , base_ptr_{ data }
-    , raw_header_{ reinterpret_cast<tcp_header*>(data) }
+TCP::TCP(uint8_t *data, unsigned int data_length)
+    : data_length_{ data_length },
+      payload_{ nullptr },
+      base_ptr_{ data },
+      raw_header_{ reinterpret_cast<tcp_header *>(data) }
 {
     this->parse();
 }
@@ -218,7 +219,7 @@ bool TCP::fin() const
  * 
  * @return const uint8_t* Pointer to first byte of payload.
  */
-uint8_t* TCP::payload()
+uint8_t *TCP::payload()
 {
     return this->payload_;
 }
@@ -238,20 +239,20 @@ unsigned int TCP::payload_length() const
  */
 void TCP::parse()
 {
-    this->source_port_      = ntohs(this->raw_header_->source_port);
+    this->source_port_ = ntohs(this->raw_header_->source_port);
     this->destination_port_ = ntohs(this->raw_header_->destination_port);
-    this->seq_number_       = ntohl(this->raw_header_->sequence_number);
-    this->ack_number_       = ntohl(this->raw_header_->acknowledgment_number);
-    this->checksum_         = ntohs(this->raw_header_->checksum);
-    this->urgent_pointer_   = 42; /* TODO */
+    this->seq_number_ = ntohl(this->raw_header_->sequence_number);
+    this->ack_number_ = ntohl(this->raw_header_->acknowledgment_number);
+    this->checksum_ = ntohs(this->raw_header_->checksum);
+    this->urgent_pointer_ = 42; /* TODO */
 
     this->flags_ = this->raw_header_->control_bits;
 
     /* allocate and load payload */
-    this->data_offset_    = this->raw_header_->data_offset__reserved >> 4;
+    this->data_offset_ = this->raw_header_->data_offset__reserved >> 4;
     this->payload_length_ = this->data_length_ - this->data_offset_ * 4;
-    this->payload_        = new uint8_t[this->payload_length_];
-    uint8_t* data_ptr     = this->base_ptr_ + this->data_offset_ * 4;
+    this->payload_ = new uint8_t[this->payload_length_];
+    uint8_t *data_ptr = this->base_ptr_ + this->data_offset_ * 4;
     std::memcpy(this->payload_, data_ptr, this->payload_length_);
 }
-}
+}  // namespace disspcap

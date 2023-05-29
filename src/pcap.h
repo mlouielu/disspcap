@@ -14,32 +14,34 @@
 #ifndef DISSPCAP_PCAP_H
 #define DISSPCAP_PCAP_H
 
-#include <memory>
 #include <pcap.h>
 #include <stdint.h>
+#include <memory>
 #include <string>
 
 #include "packet.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Pcap class for manipulating pcap files.
  */
-class Pcap {
+class Pcap
+{
 public:
     Pcap();
-    Pcap(const std::string& filename);
+    Pcap(const std::string &filename);
     ~Pcap();
-    void open_pcap(const std::string& filename);
+    void open_pcap(const std::string &filename);
     std::unique_ptr<Packet> next_packet();
     int last_packet_length() const;
 
 private:
-    pcap_t* pcap_;
-    struct pcap_pkthdr* last_header_;
+    pcap_t *pcap_;
+    struct pcap_pkthdr *last_header_;
     char error_buffer_[PCAP_ERRBUF_SIZE];
 };
-}
+}  // namespace disspcap
 
 #endif

@@ -18,25 +18,27 @@
 
 #include "packet.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Packet sniffer from interface.
  */
-class LiveSniffer {
+class LiveSniffer
+{
 public:
     LiveSniffer();
     ~LiveSniffer();
-    void start_sniffing(const std::string& interface);
+    void start_sniffing(const std::string &interface);
     void stop_sniffing();
     std::unique_ptr<Packet> next_packet();
     int last_packet_length() const;
 
 private:
-    pcap_t* handle_;
-    struct pcap_pkthdr* last_header_;
+    pcap_t *handle_;
+    struct pcap_pkthdr *last_header_;
     char error_buffer_[PCAP_ERRBUF_SIZE];
 };
-}
+}  // namespace disspcap
 
 #endif

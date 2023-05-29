@@ -14,7 +14,8 @@
 #include "irc.h"
 #include "common.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new IRC::IRC object and runs parser.
@@ -22,10 +23,8 @@ namespace disspcap {
  * @param data Packets data (starting w/ IRC).
  * @param data_length Data length.
  */
-IRC::IRC(uint8_t* data, int data_length)
-    : ptr_{ data }
-    , base_ptr_{ data }
-    , end_ptr_{ data + data_length }
+IRC::IRC(uint8_t *data, int data_length)
+    : ptr_{ data }, base_ptr_{ data }, end_ptr_{ data + data_length }
 {
     this->parse();
 }
@@ -89,7 +88,7 @@ void IRC::parse()
  */
 std::string IRC::next_string(char limitter)
 {
-    uint8_t* p       = this->ptr_;
+    uint8_t *p = this->ptr_;
     unsigned int len = 0;
 
     while (*p && *p != limitter && p < this->end_ptr_) {
@@ -100,7 +99,8 @@ std::string IRC::next_string(char limitter)
         ++len;
     }
 
-    std::string str = std::string(reinterpret_cast<const char*>(this->ptr_), len);
+    std::string str =
+        std::string(reinterpret_cast<const char *>(this->ptr_), len);
 
     /* skip limitter */
     this->ptr_ = p + 1;
@@ -115,7 +115,7 @@ std::string IRC::next_string(char limitter)
  */
 std::string IRC::next_line()
 {
-    uint8_t* p       = this->ptr_;
+    uint8_t *p = this->ptr_;
     unsigned int len = 0;
 
     while (*p && p < this->end_ptr_ - 1) {
@@ -126,7 +126,8 @@ std::string IRC::next_line()
         ++len;
     }
 
-    std::string str = std::string(reinterpret_cast<const char*>(this->ptr_), len);
+    std::string str =
+        std::string(reinterpret_cast<const char *>(this->ptr_), len);
 
     /* skip CRLF */
     this->ptr_ = p + 2;
@@ -142,4 +143,4 @@ std::string IRC::next_line()
 
     return str;
 }
-}
+}  // namespace disspcap

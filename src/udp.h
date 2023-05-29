@@ -17,7 +17,8 @@
 #include <stdint.h>
 #include <string>
 
-namespace disspcap {
+namespace disspcap
+{
 
 const uint8_t UDP_LEN = 8; /**< UDP header length. */
 
@@ -34,27 +35,28 @@ struct udp_header {
 /**
  * @brief UDP class holding UDP related information.
  */
-class UDP {
+class UDP
+{
 public:
-    UDP(uint8_t* data);
+    UDP(uint8_t *data);
     ~UDP();
     unsigned int source_port() const;
     unsigned int destination_port() const;
     unsigned int length() const;
     unsigned int checksum() const;
     unsigned int payload_length() const;
-    uint8_t* payload();
+    uint8_t *payload();
 
 private:
     unsigned int source_port_;
     unsigned int destination_port_;
     unsigned int length_;
     unsigned int checksum_;
-    struct udp_header* raw_header_;
-    uint8_t* base_ptr_;
-    uint8_t* payload_;
+    struct udp_header *raw_header_;
+    uint8_t *base_ptr_;
+    uint8_t *payload_;
     void parse();
 };
-}
+}  // namespace disspcap
 
 #endif

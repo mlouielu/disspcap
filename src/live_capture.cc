@@ -13,24 +13,22 @@
 
 #include "live_capture.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new Live Sniffer:: Live Sniffer object.
  * 
  * @param interface Interface name.
  */
-LiveSniffer::LiveSniffer()
-    : last_header_{ new struct pcap_pkthdr }
-{
-}
+LiveSniffer::LiveSniffer() : last_header_{ new struct pcap_pkthdr } {}
 
 /**
  * @brief Open interface for sniffing.
  */
-void LiveSniffer::start_sniffing(const std::string& interface)
+void LiveSniffer::start_sniffing(const std::string &interface)
 {
-    char* arg     = const_cast<char*>(interface.c_str());
+    char *arg = const_cast<char *>(interface.c_str());
     this->handle_ = pcap_open_live(arg, BUFSIZ, 0, 1000, this->error_buffer_);
 
     if (!this->handle_) {
@@ -58,8 +56,10 @@ void LiveSniffer::stop_sniffing()
  */
 std::unique_ptr<Packet> LiveSniffer::next_packet()
 {
-    uint8_t* data = const_cast<uint8_t*>(pcap_next(this->handle_, this->last_header_));
-    auto packet   = std::unique_ptr<Packet>(new Packet(data, this->last_header_->len));
+    uint8_t *data =
+        const_cast<uint8_t *>(pcap_next(this->handle_, this->last_header_));
+    auto packet =
+        std::unique_ptr<Packet>(new Packet(data, this->last_header_->len));
     if (packet->raw_data() == nullptr) {
         return nullptr;
     }
@@ -75,4 +75,4 @@ int LiveSniffer::last_packet_length() const
 {
     return this->last_header_->len;
 }
-}
+}  // namespace disspcap

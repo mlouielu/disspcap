@@ -20,7 +20,8 @@
 
 #include "ipv4.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 const uint8_t IPV6_LEN = 40; /**< IPv6 header length. */
 
@@ -68,15 +69,16 @@ struct ipv6_destination_header {
 /**
  * @brief IPv6 class holding IPv6 header information.
  */
-class IPv6 {
+class IPv6
+{
 public:
-    IPv6(uint8_t* data);
-    const std::string& next_header() const;
-    const std::string& source() const;
-    const std::string& destination() const;
+    IPv6(uint8_t *data);
+    const std::string &next_header() const;
+    const std::string &source() const;
+    const std::string &destination() const;
     unsigned int hop_limit() const;
     unsigned int payload_length() const;
-    uint8_t* payload();
+    uint8_t *payload();
 
 private:
     std::string next_header_;
@@ -84,10 +86,10 @@ private:
     std::string destination_;
     unsigned int hop_limit_;
     unsigned int payload_length_;
-    struct ipv6_header* raw_header_;
-    uint8_t* payload_;
+    struct ipv6_header *raw_header_;
+    uint8_t *payload_;
     void parse();
 };
-}
+}  // namespace disspcap
 
 #endif

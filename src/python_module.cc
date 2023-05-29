@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2018
  */
 
+#include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/chrono.h>
 
 #include "common.h"
 #include "dns.h"
@@ -55,8 +55,7 @@ PYBIND11_MODULE(disspcap, m)
         .def_readonly("params", &irc_message::params)
         .def_readonly("trailing", &irc_message::trailing);
 
-    py::class_<IRC>(m, "IRC")
-        .def_property_readonly("messages", &IRC::messages);
+    py::class_<IRC>(m, "IRC").def_property_readonly("messages", &IRC::messages);
 
     py::class_<HTTP>(m, "HTTP")
         .def_property_readonly("is_request", &HTTP::is_request)
@@ -69,12 +68,12 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("status_code", &HTTP::status_code)
         .def_property_readonly("headers", &HTTP::headers)
         .def_property_readonly("body_length", &HTTP::body_length)
-        .def_property_readonly("body", [](HTTP& http) {
-            uint8_t* bytes = http.body();
+        .def_property_readonly("body", [](HTTP &http) {
+            uint8_t *bytes = http.body();
             if (bytes == nullptr) {
                 return py::bytes("");
             }
-            return py::bytes((char*)bytes, http.body_length());
+            return py::bytes((char *) bytes, http.body_length());
         });
 
     py::class_<DNS>(m, "DNS")
@@ -110,13 +109,13 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("source_port", &UDP::source_port)
         .def_property_readonly("destination_port", &UDP::destination_port)
         .def_property_readonly("payload_length", &UDP::payload_length)
-        .def_property_readonly("payload", [](UDP& udp) {
-            uint8_t* bytes = udp.payload();
+        .def_property_readonly("payload", [](UDP &udp) {
+            uint8_t *bytes = udp.payload();
             if (bytes == nullptr) {
                 return py::bytes("");
             }
 
-            return py::bytes((char*)bytes, udp.payload_length());
+            return py::bytes((char *) bytes, udp.payload_length());
         });
 
     py::class_<TCP>(m, "TCP")
@@ -136,13 +135,13 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("syn", &TCP::syn)
         .def_property_readonly("fin", &TCP::fin)
         .def_property_readonly("payload_length", &TCP::payload_length)
-        .def_property_readonly("payload", [](TCP& tcp) {
-            uint8_t* bytes = tcp.payload();
+        .def_property_readonly("payload", [](TCP &tcp) {
+            uint8_t *bytes = tcp.payload();
             if (bytes == nullptr) {
                 return py::bytes("");
             }
 
-            return py::bytes((char*)bytes, tcp.payload_length());
+            return py::bytes((char *) bytes, tcp.payload_length());
         });
 
     py::class_<Packet>(m, "Packet")
@@ -159,7 +158,7 @@ PYBIND11_MODULE(disspcap, m)
 
     py::class_<Pcap>(m, "Pcap")
         .def(py::init())
-        .def(py::init<const std::string&>())
+        .def(py::init<const std::string &>())
         .def("open_pcap", &Pcap::open_pcap)
         .def("next_packet", &Pcap::next_packet)
         .def_property_readonly("last_packet_length", &Pcap::last_packet_length);

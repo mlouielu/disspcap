@@ -15,7 +15,8 @@
 #include "packet.h"
 #include "pcap.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Reads pcap and returns most common ip address.
@@ -42,12 +43,12 @@ std::string most_common_ip(std::string pcap_path)
     }
 
     std::string most_common_ip = "";
-    int most_common_val        = 0;
+    int most_common_val = 0;
 
-    for (auto& ip : addresses) {
+    for (auto &ip : addresses) {
         if (ip.second > most_common_val) {
             most_common_val = ip.second;
-            most_common_ip  = ip.first;
+            most_common_ip = ip.first;
         }
     }
 
@@ -62,7 +63,8 @@ std::string most_common_ip(std::string pcap_path)
  */
 std::string string_hexa(unsigned char number)
 {
-    const char hex_arr[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    const char hex_arr[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                               '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
     std::string hexa = "%";
     hexa += hex_arr[number / 16];
@@ -70,4 +72,4 @@ std::string string_hexa(unsigned char number)
 
     return hexa;
 }
-}
+}  // namespace disspcap

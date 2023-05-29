@@ -18,7 +18,8 @@
 #include <stdint.h>
 #include <string>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief TCP header struct.
@@ -38,9 +39,10 @@ struct tcp_header {
 /**
  * @brief TCP class holding TCP related information.
  */
-class TCP {
+class TCP
+{
 public:
-    TCP(uint8_t* data, unsigned int data_length);
+    TCP(uint8_t *data, unsigned int data_length);
     ~TCP();
     unsigned int source_port() const;
     unsigned int destination_port() const;
@@ -58,7 +60,7 @@ public:
     bool rst() const;
     bool syn() const;
     bool fin() const;
-    uint8_t* payload();
+    uint8_t *payload();
     unsigned int payload_length() const;
 
 private:
@@ -72,11 +74,11 @@ private:
     unsigned int flags_;
     unsigned int data_length_;
     unsigned int payload_length_;
-    uint8_t* payload_;
-    uint8_t* base_ptr_;
-    struct tcp_header* raw_header_;
+    uint8_t *payload_;
+    uint8_t *base_ptr_;
+    struct tcp_header *raw_header_;
     void parse();
 };
-}
+}  // namespace disspcap
 
 #endif

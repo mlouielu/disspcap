@@ -18,11 +18,12 @@
 #include <string>
 #include <vector>
 
-namespace disspcap {
+namespace disspcap
+{
 
-const uint8_t DNS_HDR_LEN      = 12; /**< DNS header length. */
-const uint8_t DNS_QUESTION_LEN = 4;  /**< DNS question header length. */
-const uint8_t DNS_RR_LEN       = 10; /**< DNS resource record header length. */
+const uint8_t DNS_HDR_LEN = 12;     /**< DNS header length. */
+const uint8_t DNS_QUESTION_LEN = 4; /**< DNS question header length. */
+const uint8_t DNS_RR_LEN = 10;      /**< DNS resource record header length. */
 
 /**
  * @brief DNS header part struct.
@@ -100,19 +101,20 @@ struct dns_dnskey {
 /**
  * @brief DNS class holding DNS related information.
  */
-class DNS {
+class DNS
+{
 public:
-    DNS(uint8_t* data, int data_length);
+    DNS(uint8_t *data, int data_length);
     bool is_incomplete() const;
     unsigned int qr() const;
     unsigned int question_count() const;
     unsigned int answer_count() const;
     unsigned int authority_count() const;
     unsigned int additional_count() const;
-    const std::vector<std::string>& questions() const;
-    const std::vector<std::string>& answers() const;
-    const std::vector<std::string>& authoritatives() const;
-    const std::vector<std::string>& additionals() const;
+    const std::vector<std::string> &questions() const;
+    const std::vector<std::string> &answers() const;
+    const std::vector<std::string> &authoritatives() const;
+    const std::vector<std::string> &additionals() const;
 
 private:
     unsigned int qr_;
@@ -121,21 +123,21 @@ private:
     unsigned int authority_count_;
     unsigned int additional_count_;
     bool incomplete_;
-    struct dns_header* raw_header_;
-    uint8_t* ptr_;
-    uint8_t* base_ptr_;
-    uint8_t* end_ptr_;
+    struct dns_header *raw_header_;
+    uint8_t *ptr_;
+    uint8_t *base_ptr_;
+    uint8_t *end_ptr_;
     std::vector<std::string> questions_;
     std::vector<std::string> answers_;
     std::vector<std::string> authoritatives_;
     std::vector<std::string> additionals_;
     void parse();
-    std::string parse_name(uint8_t* ptr = nullptr);
+    std::string parse_name(uint8_t *ptr = nullptr);
     std::string parse_type(uint16_t type);
     std::string parse_rdata(uint16_t type, uint16_t length);
     std::string parse_dnssec_algorithm(uint8_t algorithm);
     std::string parse_digest_type(uint8_t digest_type);
 };
-}
+}  // namespace disspcap
 
 #endif

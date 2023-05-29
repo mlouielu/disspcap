@@ -18,7 +18,8 @@
 #include <string>
 #include <vector>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Struct holding message information.
@@ -33,20 +34,21 @@ struct irc_message {
 /**
  * @brief IRC class holding IRC messages.
  */
-class IRC {
+class IRC
+{
 public:
-    IRC(uint8_t* data, int data_length);
+    IRC(uint8_t *data, int data_length);
     const std::vector<struct irc_message> messages() const;
 
 private:
     std::vector<struct irc_message> messages_;
-    uint8_t* ptr_;
-    uint8_t* base_ptr_;
-    uint8_t* end_ptr_;
+    uint8_t *ptr_;
+    uint8_t *base_ptr_;
+    uint8_t *end_ptr_;
     void parse();
     std::string next_string(char limitter = ' ');
     std::string next_line();
 };
-}
+}  // namespace disspcap
 
 #endif

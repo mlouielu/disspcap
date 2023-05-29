@@ -14,18 +14,19 @@
 #include <stdint.h>
 #include <string>
 
-namespace disspcap {
+namespace disspcap
+{
 
-const int ETH_LENGTH   = 14; /**< Ethernet header length. */
-const int ETH_ADDR_LEN = 6;  /**< MAC address length. */
-const int VLAN_LEN     = 4;  /**< VLAN - 802.1Q header length. */
+const int ETH_LENGTH = 14;  /**< Ethernet header length. */
+const int ETH_ADDR_LEN = 6; /**< MAC address length. */
+const int VLAN_LEN = 4;     /**< VLAN - 802.1Q header length. */
 
-const uint16_t ETH_IPv4  = 0x0800; /**< Ethernet IPv4 type value. */
-const uint16_t ETH_IPv6  = 0x86DD; /**< Ethernet IPv6 type value. */
-const uint16_t ETH_ARP   = 0x0806; /**< Ethernet ARP type value. */
+const uint16_t ETH_IPv4 = 0x0800;  /**< Ethernet IPv4 type value. */
+const uint16_t ETH_IPv6 = 0x86DD;  /**< Ethernet IPv6 type value. */
+const uint16_t ETH_ARP = 0x0806;   /**< Ethernet ARP type value. */
 const uint16_t ETH_8021Q = 0x8100; /**< Ethernet 802.1Q type value. */
 
-std::string str_mac(uint8_t*);
+std::string str_mac(uint8_t *);
 
 /**
  * @brief Ethernet header struct.
@@ -47,23 +48,24 @@ struct vlan_header_8021q {
 /**
  * @brief Ethernet class holding ethernet header information.
 */
-class Ethernet {
+class Ethernet
+{
 public:
-    Ethernet(uint8_t* data);
-    const std::string& destination() const;
-    const std::string& source() const;
-    const std::string& type() const;
-    uint8_t* payload() const;
+    Ethernet(uint8_t *data);
+    const std::string &destination() const;
+    const std::string &source() const;
+    const std::string &type() const;
+    uint8_t *payload() const;
 
 private:
     std::string destination_;
     std::string source_;
     std::string type_;
-    struct ethernet_header* raw_header_;
-    uint8_t* payload_;
+    struct ethernet_header *raw_header_;
+    uint8_t *payload_;
     void parse();
     void handle_vlan();
 };
-}
+}  // namespace disspcap
 
 #endif

@@ -16,15 +16,15 @@
 
 #include <arpa/inet.h>
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Construct a new IPv4::IPv4 object and runs parser.
  *
  * @param data Packets data (starting w/ IPv4).
  */
-IPv4::IPv4(uint8_t* data)
-    : raw_header_{ reinterpret_cast<ipv4_header*>(data) }
+IPv4::IPv4(uint8_t *data) : raw_header_{ reinterpret_cast<ipv4_header *>(data) }
 {
     this->parse();
 }
@@ -34,7 +34,7 @@ IPv4::IPv4(uint8_t* data)
  *
  * @return const std::string& Source IP address.
  */
-const std::string& IPv4::source() const
+const std::string &IPv4::source() const
 {
     return this->source_;
 }
@@ -44,7 +44,7 @@ const std::string& IPv4::source() const
  *
  * @return const std::string& Destination IP address.
  */
-const std::string& IPv4::destination() const
+const std::string &IPv4::destination() const
 {
     return this->destination_;
 }
@@ -54,7 +54,7 @@ const std::string& IPv4::destination() const
  *
  * @return const std::string& Next protocol.
  */
-const std::string& IPv4::protocol() const
+const std::string &IPv4::protocol() const
 {
     return this->protocol_;
 }
@@ -84,7 +84,7 @@ unsigned int IPv4::payload_length() const
  * 
  * @return uint8_t* Pointer to payload data.
  */
-uint8_t* IPv4::payload()
+uint8_t *IPv4::payload()
 {
     return this->payload_;
 }
@@ -96,20 +96,20 @@ void IPv4::parse()
 {
     /* next protocol */
     switch (this->raw_header_->protocol) {
-    case IP_ICMP:
-        this->protocol_ = "ICMP";
-        break;
-    case IP_IGMP:
-        this->protocol_ = "IGMP";
-        break;
-    case IP_TCP:
-        this->protocol_ = "TCP";
-        break;
-    case IP_UDP:
-        this->protocol_ = "UDP";
-        break;
-    default:
-        this->protocol_ = "UNKNOWN";
+        case IP_ICMP:
+            this->protocol_ = "ICMP";
+            break;
+        case IP_IGMP:
+            this->protocol_ = "IGMP";
+            break;
+        case IP_TCP:
+            this->protocol_ = "TCP";
+            break;
+        case IP_UDP:
+            this->protocol_ = "UDP";
+            break;
+        default:
+            this->protocol_ = "UNKNOWN";
     }
 
     /* header length */
@@ -137,7 +137,9 @@ void IPv4::parse()
     }
 
     /* set payload  */
-    this->payload_        = reinterpret_cast<uint8_t*>(this->raw_header_) + this->header_length_ * 4;
-    this->payload_length_ = ntohs(this->raw_header_->total_length) - this->header_length_ * 4;
+    this->payload_ = reinterpret_cast<uint8_t *>(this->raw_header_) +
+                     this->header_length_ * 4;
+    this->payload_length_ =
+        ntohs(this->raw_header_->total_length) - this->header_length_ * 4;
 }
-}
+}  // namespace disspcap
