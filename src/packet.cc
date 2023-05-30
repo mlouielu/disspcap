@@ -305,6 +305,8 @@ void Packet::parse()
                 new DcaConfig(this->payload_, this->payload_length_);
         } else if (this->payload_length_ >= 10) {
             this->dca_raw_ = new DcaRaw(this->payload_, this->payload_length_);
+            this->payload_ = this->dca_raw_->payload();
+            this->payload_length_ = this->dca_raw_->payload_length();
         }
     }
 }

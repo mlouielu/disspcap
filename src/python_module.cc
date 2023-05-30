@@ -200,10 +200,21 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("dca_config", &Packet::dca_config)
         .def_property_readonly("dca_raw", &Packet::dca_raw);
 
-    py::class_<Pcap>(m, "Pcap")
+    py::class_<Pcap>(m, "Pcap", py::buffer_protocol())
         .def(py::init())
         .def(py::init<const std::string &>())
         .def("open_pcap", &Pcap::open_pcap)
         .def("next_packet", &Pcap::next_packet)
+        .def("fetch_packets", &Pcap::fetch_packets)
+        .def("dca_fetch_packets", &Pcap::dca_fetch_packets)
+        .def("get_dca_data", &Pcap::get_dca_data)
+        .def("get_raw_data",
+             [](Pcap &pcap, unsigned int port) {
+                 uint8_t *bytes;
+                 uint64_t length;
+
+                 std::tie(bytes, length) = pcap.get_raw_data(port);
+                 return py::bytes((char *) bytes, length);
+             })
         .def_property_readonly("last_packet_length", &Pcap::last_packet_length);
 }

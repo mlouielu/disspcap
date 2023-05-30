@@ -13,6 +13,7 @@
 
 #include "pcap.h"
 
+#include <cstring>
 #include <stdexcept>
 
 namespace disspcap
@@ -79,6 +80,71 @@ std::unique_ptr<Packet> Pcap::next_packet()
     return packet;
 }
 
+
+void Pcap::fetch_packets()
+{
+    while (true) {
+        auto packet = this->next_packet();
+        if (packet == nullptr) {
+            break;
+        }
+
+        this->packets_.push_back(std::move(packet));
+    }
+}
+
+void Pcap::dca_fetch_packets(std::vector<unsigned int> data_ports)
+{
+    for (auto &port : data_ports) {
+        this->dca_dataset_.insert(
+            { port, std::unique_ptr<DcaData>(new DcaData) });
+    }
+
+    while (true) {
+        auto packet = this->next_packet();
+        if (packet == nullptr) {
+            break;
+        }
+
+        // Add into DCA dataset
+        if (packet->dca_raw()) {
+            this->dca_dataset_[packet->udp()->destination_port()]->add(
+                packet->dca_raw());
+        }
+
+        // Add to packets
+        this->packets_.push_back(std::move(packet));
+    }
+}
+
+std::unique_ptr<DcaData> Pcap::get_dca_data(unsigned int port)
+{
+    return std::move(this->dca_dataset_[port]);
+}
+
+std::tuple<uint8_t *, uint64_t> Pcap::get_raw_data(unsigned int port)
+{
+    auto total_length = 0;
+
+    for (auto &packet : this->packets_) {
+        if (packet->udp() && packet->udp()->destination_port() == port) {
+            total_length += packet->payload_length();
+        }
+    }
+
+    auto data = new uint8_t[total_length];
+    auto current_length = 0;
+    for (auto &packet : this->packets_) {
+        if (packet->udp() && packet->udp()->destination_port() == port) {
+            auto payload = packet->payload();
+            memcpy(data + current_length, payload, packet->payload_length());
+            current_length += packet->payload_length();
+        }
+    }
+
+    return std::make_tuple(data, total_length);
+}
+
 /**
  * @brief Returns length of last processed packet.
  *
@@ -88,4 +154,5 @@ int Pcap::last_packet_length() const
 {
     return this->last_header_->len;
 }
+
 }  // namespace disspcap
