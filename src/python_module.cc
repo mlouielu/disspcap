@@ -9,11 +9,15 @@
  */
 
 #include <pybind11/chrono.h>
+#include <pybind11/complex.h>
+#include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "common.h"
 #include "dca_config.h"
+#include "dca_data.h"
+#include "dca_raw.h"
 #include "dns.h"
 #include "ethernet.h"
 #include "http.h"
@@ -161,6 +165,25 @@ PYBIND11_MODULE(disspcap, m)
             }
 
             return py::bytes((char *) bytes, raw.payload_length());
+        });
+
+    py::class_<DcaData>(m, "DcaData", py::buffer_protocol())
+        .def_property_readonly("dca_report_tx_bytes",
+                               &DcaData::dca_report_tx_bytes)
+        .def_property_readonly("received_rx_bytes", &DcaData::received_rx_bytes)
+        .def_property_readonly("max_seq_id", &DcaData::max_seq_id)
+        .def_property_readonly("is_out_of_order", &DcaData::is_out_of_order)
+        .def("convert_int16", &DcaData::convert_int16)
+        .def("convert_complex", &DcaData::convert_complex)
+        .def("get_int16", &DcaData::get_int16)  // Use buffer protocol instead
+        .def("get_complex",
+             &DcaData::get_complex)  // Use buffer protocol instead
+        .def_buffer([](DcaData &dd) -> py::buffer_info {
+            return py::buffer_info(
+                dd.get_complex(), sizeof(std::complex<float>),
+                py::format_descriptor<std::complex<float>>::format(), 1,
+                { dd.dca_report_tx_bytes() / DcaData::TI_COMPLEX_SIZE },
+                { sizeof(std::complex<float>) });
         });
 
     py::class_<Packet>(m, "Packet")

@@ -44,6 +44,7 @@ ext_modules = [
             'src/dns.cc',
             'src/dca_config.cc',
             'src/dca_raw.cc',
+            'src/dca_data.cc',
             'src/http.cc',
             'src/irc.cc',
             'src/telnet.cc',
