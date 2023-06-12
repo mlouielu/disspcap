@@ -8,7 +8,7 @@ import subprocess
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-__version__ = '1.1.1'
+__version__ = "1.1.1"
 
 with open("README.rst", "r") as fh:
     long_description = fh.read()
@@ -19,44 +19,45 @@ class get_pybind_include(object):
 
     The purpose of this class is to postpone importing pybind11
     until it is actually installed, so that the ``get_include()``
-    method can be invoked. """
+    method can be invoked."""
 
     def __init__(self, user=False):
         self.user = user
 
     def __str__(self):
         import pybind11
+
         return pybind11.get_include(self.user)
 
 
 ext_modules = [
     Extension(
-        'disspcap',
+        "disspcap",
         sources=[
-            'src/python_module.cc',
-            'src/pcap.cc',
-            'src/packet.cc',
-            'src/ethernet.cc',
-            'src/ipv4.cc',
-            'src/ipv6.cc',
-            'src/tcp.cc',
-            'src/udp.cc',
-            'src/dns.cc',
-            'src/dca_config.cc',
-            'src/dca_raw.cc',
-            'src/dca_data.cc',
-            'src/http.cc',
-            'src/irc.cc',
-            'src/telnet.cc',
-            'src/common.cc'
+            "src/python_module.cc",
+            "src/pcap.cc",
+            "src/packet.cc",
+            "src/ethernet.cc",
+            "src/ipv4.cc",
+            "src/ipv6.cc",
+            "src/tcp.cc",
+            "src/udp.cc",
+            "src/dns.cc",
+            "src/dca_config.cc",
+            "src/dca_raw.cc",
+            "src/dca_data.cc",
+            "src/http.cc",
+            "src/irc.cc",
+            "src/telnet.cc",
+            "src/common.cc",
         ],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
-            get_pybind_include(user=True)
+            get_pybind_include(user=True),
         ],
-        libraries=['pcap'],
-        language='c++'
+        libraries=["pcap"],
+        language="c++",
     ),
 ]
 
@@ -68,8 +69,9 @@ def has_flag(compiler, flagname):
     the specified compiler.
     """
     import tempfile
-    with tempfile.NamedTemporaryFile('w', suffix='.cpp') as f:
-        f.write('int main (int argc, char **argv) { return 0; }')
+
+    with tempfile.NamedTemporaryFile("w", suffix=".cpp") as f:
+        f.write("int main (int argc, char **argv) { return 0; }")
         try:
             compiler.compile([f.name], extra_postargs=[flagname])
         except setuptools.distutils.errors.CompileError:
@@ -82,64 +84,64 @@ def cpp_flag(compiler):
 
     The c++14 is prefered over c++11 (when it is available).
     """
-    if has_flag(compiler, '-std=c++14'):
-        return '-std=c++14'
-    elif has_flag(compiler, '-std=c++11'):
-        return '-std=c++11'
+    if has_flag(compiler, "-std=c++14"):
+        return "-std=c++14"
+    elif has_flag(compiler, "-std=c++11"):
+        return "-std=c++11"
     else:
-        raise RuntimeError('Unsupported compiler -- at least C++11 support '
-                           'is needed!')
+        raise RuntimeError(
+            "Unsupported compiler -- at least C++11 support " "is needed!"
+        )
 
 
 class BuildExt(build_ext):
     """A custom build extension for adding compiler-specific options."""
+
     c_opts = {
-        'msvc': ['/EHsc'],
-        'unix': [],
+        "msvc": ["/EHsc"],
+        "unix": [],
     }
 
-    if sys.platform == 'darwin':
-        c_opts['unix'] += ['-stdlib=libc++', '-mmacosx-version-min=10.7']
+    if sys.platform == "darwin":
+        c_opts["unix"] += ["-stdlib=libc++", "-mmacosx-version-min=10.7"]
 
     def build_extensions(self):
         ct = self.compiler.compiler_type
         opts = self.c_opts.get(ct, [])
-        if ct == 'unix':
-            opts.append('-DVERSION_INFO="%s"' %
-                        self.distribution.get_version())
+        if ct == "unix":
+            opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append(cpp_flag(self.compiler))
-            if has_flag(self.compiler, '-fvisibility=hidden'):
-                opts.append('-fvisibility=hidden')
-        elif ct == 'msvc':
-            opts.append('/DVERSION_INFO=\\"%s\\"' %
-                        self.distribution.get_version())
+            if has_flag(self.compiler, "-fvisibility=hidden"):
+                opts.append("-fvisibility=hidden")
+        elif ct == "msvc":
+            opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
         for ext in self.extensions:
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
 
 
 setup(
-    name='disspcap',
+    name="disspcap",
     version=__version__,
-    author='Daniel Uhricek',
-    author_email='daniel.uhricek@gypri.cz',
-    url='https://github.com/danieluhricek/disspcap',
-    description='Pcap parsing library.',
+    author="Daniel Uhricek",
+    author_email="daniel.uhricek@gypri.cz",
+    url="https://github.com/danieluhricek/disspcap",
+    description="Pcap parsing library.",
     long_description=long_description,
-    long_description_content_type='text/x-rst',
+    long_description_content_type="text/x-rst",
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2'],
-    cmdclass={'build_ext': BuildExt},
+    install_requires=["pybind11>=2.2"],
+    cmdclass={"build_ext": BuildExt},
     zip_safe=False,
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: C++',
-        'Topic :: Internet',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'Topic :: System :: Networking',
-        'Topic :: System :: Networking :: Monitoring',
-    ]
+        "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python",
+        "Programming Language :: C++",
+        "Topic :: Internet",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: System :: Networking",
+        "Topic :: System :: Networking :: Monitoring",
+    ],
 )
