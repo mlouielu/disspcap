@@ -11,3 +11,9 @@ dependencies = ["pybind11~=2.2"]
 [build-system]
 requires = ["setuptools>=42", "wheel", "pybind11~=2.10"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "numpy>=1.21.6",
+    "pytest>=7.4.4",
+]
