@@ -1,14 +1,12 @@
-[tool.poetry]
+[project]
 name = "disspcap"
 version = "1.1.1"
 description = "Pcap parsing library."
-authors = ["Daniel Uhricek <daniel.uhricek@gypri.cz>"]
-license = "MIT"
+authors = [{ name = "Daniel Uhricek", email = "daniel.uhricek@gypri.cz" }]
+requires-python = "~=3.7"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.7"
-pybind11 = "^2.2"
+license = "MIT"
+dependencies = ["pybind11~=2.2"]
 
 [build-system]
 requires = ["setuptools>=42", "wheel", "pybind11~=2.10"]
