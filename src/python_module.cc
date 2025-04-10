@@ -168,6 +168,8 @@ PYBIND11_MODULE(disspcap, m)
         });
 
     py::class_<DcaData>(m, "DcaData", py::buffer_protocol())
+		.def(py::init<>())
+		.def("add", &DcaData::add)
         .def_property_readonly("dca_report_tx_bytes",
                                &DcaData::dca_report_tx_bytes)
         .def_property_readonly("received_rx_bytes", &DcaData::received_rx_bytes)
