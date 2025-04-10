@@ -187,6 +187,39 @@ PYBIND11_MODULE(disspcap, m)
         });
 
     py::class_<Packet>(m, "Packet")
+		.def(py::init([](py::buffer buffer) {
+			py::buffer_info info = buffer.request();
+			return new Packet(static_cast<uint8_t*>(info.ptr), info.size);
+		}))
+		.def(py::init([](py::buffer buffer, py::object ts_obj) {
+			py::buffer_info info = buffer.request();
+
+			// Extract seconds and microseconds from a Python object
+			// This assumes ts_obj has attributes 'tv_sec' and 'tv_usec'
+			struct timeval tv;
+			tv.tv_sec = py::cast<long>(ts_obj.attr("tv_sec"));
+			tv.tv_usec = py::cast<long>(ts_obj.attr("tv_usec"));
+
+			return new Packet(static_cast<uint8_t*>(info.ptr), info.size, tv);
+		}))
+		.def(py::init([](py::buffer buffer, long tv_sec, long tv_usec) {
+			py::buffer_info info = buffer.request();
+
+			struct timeval tv;
+			tv.tv_sec = tv_sec;
+			tv.tv_usec = tv_usec;
+
+			return new Packet(static_cast<uint8_t*>(info.ptr), info.size, tv);
+		}))
+		.def("__len__", &Packet::length)
+		.def_property_readonly("length", &Packet::length)
+		.def_property_readonly("payload_length", &Packet::payload_length)
+		.def_property_readonly("payload", [](Packet& p) {
+			return py::bytes(reinterpret_cast<char*>(p.payload()), p.payload_length());
+		})
+		.def_property_readonly("raw_data", [](Packet& p) {
+			return py::bytes(reinterpret_cast<char*>(p.raw_data()), p.length());
+		})
         .def_property_readonly("ts", &Packet::ts)
         .def_property_readonly("ethernet", &Packet::ethernet)
         .def_property_readonly("ipv4", &Packet::ipv4)
