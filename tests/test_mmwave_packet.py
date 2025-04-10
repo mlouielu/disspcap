@@ -55,7 +55,6 @@ def test_dca_data(dr1):
     dd = disspcap.DcaData()
     dr1 = disspcap.Packet(dr1)
 
-
     dd.add(dr1.dca_raw)
     dd.convert_complex(True)
 
