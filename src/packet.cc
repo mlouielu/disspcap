@@ -15,6 +15,13 @@
 namespace disspcap
 {
 
+struct pcap_pkthdr {
+    uint32_t ts_sec;   // timestamp seconds
+    uint32_t ts_usec;  // timestamp microseconds
+    uint32_t caplen;   // length of portion captured
+    uint32_t origlen;  // original packet length
+};
+
 /**
  * @brief Construct a new Packet:: Packet object and runs parser.
  *
@@ -73,6 +80,43 @@ Packet::Packet(uint8_t *data, unsigned int length, struct timeval ts)
 
     this->parse();
 }
+
+/**
+ * @brief Construct a new Packet object from pcap-style header and data buffers.
+ *
+ * @param header Pointer to the 16-byte pcap packet header containing timestamp and length info.
+ * @param data Pointer to the packet data.
+ */
+Packet::Packet(uint8_t *header, uint8_t *data)
+    : raw_data_{ data },
+      ethernet_{ nullptr },
+      ipv4_{ nullptr },
+      ipv6_{ nullptr },
+      udp_{ nullptr },
+      tcp_{ nullptr },
+      dns_{ nullptr },
+      http_{ nullptr },
+      irc_{ nullptr },
+      telnet_{ nullptr },
+      dca_config_{ nullptr },
+      dca_raw_{ nullptr }
+{
+    const pcap_pkthdr *pkthdr = reinterpret_cast<const pcap_pkthdr *>(header);
+
+    this->length_ = pkthdr->origlen;
+    this->payload_length_ = pkthdr->caplen;
+
+    // Set timestamp
+    this->ts_ = std::chrono::system_clock::time_point(
+        std::chrono::seconds(pkthdr->ts_sec) +
+        std::chrono::microseconds(pkthdr->ts_usec));
+
+    // Parse the packet
+    if (data) {
+        this->parse();
+    }
+}
+
 
 /**
  * @brief Destroy the Packet:: Packet object.

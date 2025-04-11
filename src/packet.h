@@ -39,6 +39,7 @@ class Packet
 public:
     Packet(uint8_t *data, unsigned int length);
     Packet(uint8_t *data, unsigned int length, struct timeval ts);
+    Packet(uint8_t *header, uint8_t *data);
     ~Packet();
     unsigned int length() const;
     unsigned int payload_length() const;

@@ -213,6 +213,13 @@ PYBIND11_MODULE(disspcap, m)
 
 			return new Packet(static_cast<uint8_t*>(info.ptr), info.size, tv);
 		}))
+		.def(py::init([](py::buffer buffer, py::buffer buffer2) {
+			py::buffer_info info = buffer.request();
+			py::buffer_info info2 = buffer2.request();
+
+			return new Packet(static_cast<uint8_t*>(info.ptr),
+			                  static_cast<uint8_t*>(info2.ptr));
+		}), py::arg("header"), py::arg("data"))
 		.def("__len__", &Packet::length)
 		.def_property_readonly("length", &Packet::length)
 		.def_property_readonly("payload_length", &Packet::payload_length)

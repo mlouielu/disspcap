@@ -51,6 +51,54 @@ def test_dca_raw(dr1):
     assert len(p.dca_raw.payload) == 1456
 
 
+def test_packet_constructor(dr1):
+    header = b'\xa8*\xf8g5R\x06\x00\xe4\x05\x00\x00\xe4\x05\x00\x00'
+
+
+    p = disspcap.Packet(dr1)
+    assert len(dr1) == 1508
+    assert len(p) == 1508
+    assert p.dca_raw.seq_id == 1
+    assert p.dca_raw.byte_count == 0
+    assert len(p.dca_raw.payload) == 1456
+
+    class ts:
+        tv_sec = 1744317096
+        tv_usec = 405266
+
+    p = disspcap.Packet(dr1, ts())
+    assert p.dca_config is None
+    assert p.dca_raw
+    assert int(p.ts.timestamp()) == 1744317096
+    assert p.ts.microsecond == 405266
+    assert p.raw_data == dr1
+    assert len(p) == 1508
+    assert p.dca_raw.seq_id == 1
+    assert p.dca_raw.byte_count == 0
+    assert len(p.dca_raw.payload) == 1456
+
+    p = disspcap.Packet(dr1, 1744317096, 405266)
+    assert p.dca_config is None
+    assert p.dca_raw
+    assert int(p.ts.timestamp()) == 1744317096
+    assert p.ts.microsecond == 405266
+    assert p.raw_data == dr1
+    assert len(p) == 1508
+    assert p.dca_raw.seq_id == 1
+    assert p.dca_raw.byte_count == 0
+    assert len(p.dca_raw.payload) == 1456
+
+    p = disspcap.Packet(header=header, data=dr1)
+    assert p.dca_config is None
+    assert p.dca_raw
+    assert int(p.ts.timestamp()) == 1744317096
+    assert p.ts.microsecond == 414261
+    assert len(p) == 1508
+    assert p.dca_raw.seq_id == 1
+    assert p.dca_raw.byte_count == 0
+    assert len(p.dca_raw.payload) == 1456
+
+
 def test_dca_data(dr1):
     dd = disspcap.DcaData()
     dr1 = disspcap.Packet(dr1)
