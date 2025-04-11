@@ -4,7 +4,6 @@ MaxEmptyLinesToKeep: 3
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 DerivePointerAlignment: false
-PointerAlignment: Right
 TabWidth: 4
 UseTab: Never
 IndentWidth: 4
