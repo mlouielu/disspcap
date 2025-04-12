@@ -8,6 +8,8 @@
 #include <cstring>
 #include <memory>
 #include <unordered_map>
+#include <vector>
+
 
 namespace disspcap
 {
@@ -96,6 +98,100 @@ private:
     /// Complex numbers, with non-interleaved to interleaved conversion
     /// The layout is: [IQ (sample 1), IQ (sample 2), ...]
     std::complex<float> *p_complex_ = nullptr;
+};
+
+
+/**
+ * @brief Streaming version of DCA data handler
+ *
+ * This class directly converts incoming packets to I/Q data without checking
+ * sequence IDs or other metadata. It's optimized for streaming applications
+ * where packets are processed in real-time.
+ */
+class DcaDataStreaming
+{
+public:
+    /* Constants */
+    static constexpr int INT16_SIZE = sizeof(int16_t); /* 2 bytes */
+    static constexpr int TI_COMPLEX_SIZE = 4; /* 4 bytes, see p.4, SWRA581B */
+    static constexpr int LVDS_ROW_SIZE = sizeof(struct lvds_row); /* 8 bytes */
+
+    /**
+     * @brief Constructor
+     * @param lsb_quadrature True if Q in LSB, I in MSB (mmwave SDK default),
+     *                      False if I in LSB, Q in MSB (mmwave studio default)
+     */
+    DcaDataStreaming(bool lsb_quadrature = true)
+        : lsb_quadrature_(lsb_quadrature)
+    {
+        // Initialize the I/Q data vector
+        // Reserve space for 372736 samples (364 * 1024)
+        // That is 364 samples per packet, 1024 packets total
+        iq_data_.reserve(372736);
+    }
+
+    /**
+     * @brief Add a raw packet and immediately convert it to I/Q data
+     * @param raw Pointer to DcaRaw packet
+     */
+    void add(const DcaRaw *raw);
+
+    /**
+     * @brief Get the current count of I/Q samples
+     * @return Number of complex samples stored
+     */
+    size_t size() const { return iq_data_.size(); }
+
+    /**
+     * @brief Get direct access to the I/Q data vector
+     * @return Reference to the vector of complex samples
+     */
+    const std::vector<std::complex<float>> &get_iq_data() const
+    {
+        return iq_data_;
+    }
+
+    /**
+     * @brief Get pointer to the I/Q data for Python bindings
+     * @return Pointer to the first element of I/Q data
+     */
+    const std::complex<float> *data() const { return iq_data_.data(); }
+
+
+    /**
+     * @brief Remove n elements from the beginning of the data
+     * @param n Number of elements to remove
+     */
+    void clear(size_t n = 0)
+    {
+        if (n == 0 || n >= iq_data_.size()) {
+            // If n is 0 or exceeds the size, clear everything
+            iq_data_.clear();
+            return;
+        }
+
+        // If we're removing most of the data, it's more efficient to
+        // save the remaining elements and rebuild the vector
+        if (n > iq_data_.size() / 2) {
+            // Save remaining elements (size - n)
+            size_t remaining = iq_data_.size() - n;
+            std::vector<std::complex<float>> temp(remaining);
+            std::copy(iq_data_.begin() + n, iq_data_.end(), temp.begin());
+
+            // Clear and re-add
+            iq_data_.clear();
+            iq_data_.reserve(remaining);  // Reserve exact capacity needed
+            iq_data_.insert(iq_data_.begin(), temp.begin(), temp.end());
+        } else {
+            // For smaller removals, use standard erase
+            iq_data_.erase(iq_data_.begin(), iq_data_.begin() + n);
+        }
+    }
+
+private:
+    /* Data */
+    std::vector<std::complex<float>> iq_data_;  // Vector of complex samples
+    bool lsb_quadrature_;                       // Quadrature format flag
 };
 
 }  // namespace disspcap

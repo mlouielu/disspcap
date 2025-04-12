@@ -169,6 +169,7 @@ PYBIND11_MODULE(disspcap, m)
 
     py::class_<DcaData>(m, "DcaData", py::buffer_protocol())
 		.def(py::init<>())
+		.def("__len__", &DcaData::received_rx_bytes)
 		.def("add", &DcaData::add)
         .def_property_readonly("dca_report_tx_bytes",
                                &DcaData::dca_report_tx_bytes)
@@ -187,6 +188,28 @@ PYBIND11_MODULE(disspcap, m)
                 { dd.dca_report_tx_bytes() / DcaData::TI_COMPLEX_SIZE },
                 { sizeof(std::complex<float>) });
         });
+
+
+    py::class_<disspcap::DcaDataStreaming>(m, "DcaDataStreaming")
+        .def(py::init<bool>(), py::arg("lsb_quadrature") = true)
+        .def("__len__", &disspcap::DcaDataStreaming::size)
+        .def("add", &disspcap::DcaDataStreaming::add)
+        .def("size", &disspcap::DcaDataStreaming::size)
+        .def("clear", &disspcap::DcaDataStreaming::clear,
+             py::arg("n") = 0,
+             "Remove n elements from the beginning of the data. If n=0, clear all data.")
+        .def(
+            "get_numpy",
+            [](const disspcap::DcaDataStreaming &self) {
+                // Create a NumPy array that directly references the data
+                // This avoids a copy operation for better performance
+                return py::array_t<std::complex<float>>(
+                    { self.size() },                  // Shape
+                    { sizeof(std::complex<float>) },  // Strides
+                    self.data()                       // Data pointer
+                );
+            },
+            "Get a NumPy array view of the I/Q data");
 
     py::class_<Packet>(m, "Packet")
 		.def(py::init([](py::buffer buffer) {

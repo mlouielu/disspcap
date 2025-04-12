@@ -92,4 +92,37 @@ std::complex<float> *DcaData::convert_complex(const bool lsb_quadrature = true)
     return this->p_complex_;
 }
 
+
+void DcaDataStreaming::add(const DcaRaw *raw)
+{
+    if (!raw)
+        return;
+
+    // Get packet payload
+    uint8_t *payload = raw->payload();
+    uint32_t payload_length = raw->payload_length();
+
+    // Process each LVDS row in the payload
+    struct lvds_row *row;
+    for (uint32_t offset = 0; offset < payload_length;
+         offset += LVDS_ROW_SIZE) {
+        row = reinterpret_cast<struct lvds_row *>(payload + offset);
+
+        // Create and add complex samples based on the quadrature format
+        if (lsb_quadrature_) {
+            // LSB Q, MSB I (mmwave SDK default)
+            iq_data_.emplace_back(
+                std::complex<float>(row->lvds_l2_s1, row->lvds_l1_s1));
+            iq_data_.emplace_back(
+                std::complex<float>(row->lvds_l2_s2, row->lvds_l1_s2));
+        } else {
+            // LSB I, MSB Q (mmwave studio default)
+            iq_data_.emplace_back(
+                std::complex<float>(row->lvds_l1_s1, row->lvds_l2_s1));
+            iq_data_.emplace_back(
+                std::complex<float>(row->lvds_l1_s2, row->lvds_l2_s2));
+        }
+    }
+}
+
 }  // namespace disspcap
