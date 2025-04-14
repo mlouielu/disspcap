@@ -115,6 +115,8 @@ public:
     static constexpr int INT16_SIZE = sizeof(int16_t); /* 2 bytes */
     static constexpr int TI_COMPLEX_SIZE = 4; /* 4 bytes, see p.4, SWRA581B */
     static constexpr int LVDS_ROW_SIZE = sizeof(struct lvds_row); /* 8 bytes */
+    static constexpr int VECTOR_RESERVE_SIZE =
+        372736; /* 364 I/Q * 1024 packet */
 
     /**
      * @brief Constructor
@@ -127,7 +129,7 @@ public:
         // Initialize the I/Q data vector
         // Reserve space for 372736 samples (364 * 1024)
         // That is 364 samples per packet, 1024 packets total
-        iq_data_.reserve(372736);
+        iq_data_.reserve(VECTOR_RESERVE_SIZE);
     }
 
     /**
@@ -180,7 +182,6 @@ public:
 
             // Clear and re-add
             iq_data_.clear();
-            iq_data_.reserve(remaining);  // Reserve exact capacity needed
             iq_data_.insert(iq_data_.begin(), temp.begin(), temp.end());
         } else {
             // For smaller removals, use standard erase
