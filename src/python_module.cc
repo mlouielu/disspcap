@@ -156,6 +156,10 @@ PYBIND11_MODULE(disspcap, m)
         .def_property_readonly("footer", &DcaConfig::footer);
 
     py::class_<DcaRaw>(m, "DcaRaw")
+        .def(py::init([](py::buffer buffer) {
+            py::buffer_info info = buffer.request();
+            return new DcaRaw(static_cast<uint8_t*>(info.ptr), info.size);
+        }))
         .def_property_readonly("seq_id", &DcaRaw::seq_id)
         .def_property_readonly("byte_count", &DcaRaw::byte_count)
         .def_property_readonly("payload", [](DcaRaw &raw) {
