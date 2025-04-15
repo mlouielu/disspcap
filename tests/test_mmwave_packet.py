@@ -119,6 +119,13 @@ def test_dca_data(dr1):
     arr = np.array(dd, copy=False, dtype=np.complex64)
     assert arr.shape == (364,)
 
+def test_dca_raw(dr1):
+    data = dr1[42:]
+
+    p = disspcap.DcaRaw(data)
+    assert p.seq_id == 1
+    assert p.byte_count == 0
+
 
 def test_pcap(pcap_path):
     p = disspcap.Pcap(pcap_path)
