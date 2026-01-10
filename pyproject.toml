@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools", "wheel", "pybind11"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disspcap"
+version = "1.1.1"
+description = "Pcap parsing library."
+readme = "README.rst"
+authors = [{ name = "Daniel Uhricek", email = "daniel.uhricek@gypri.cz" }]
+license = { text = "MIT" }
+dependencies = ["pybind11>=2.2"]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: C++",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Networking",
+    "Topic :: System :: Networking :: Monitoring",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+ext-modules = [
+    { name = 'disspcap', sources = [
+        'src/python_module.cc',
+        'src/pcap.cc',
+        'src/packet.cc',
+        'src/ethernet.cc',
+        'src/ipv4.cc',
+        'src/ipv6.cc',
+        'src/tcp.cc',
+        'src/udp.cc',
+        'src/dns.cc',
+        'src/http.cc',
+        'src/irc.cc',
+        'src/telnet.cc',
+        'src/common.cc',
+    ] },
+]

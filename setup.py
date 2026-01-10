@@ -48,10 +48,14 @@ ext_modules = [
             'src/tcp.cc',
             'src/udp.cc',
             'src/dns.cc',
+            "src/dca_config.cc",
+            "src/dca_raw.cc",
+            "src/dca_data.cc",
             'src/http.cc',
             'src/irc.cc',
             'src/telnet.cc',
-            'src/common.cc'
+            "src/common.cc",
+            "src/python_dca_user_lvds.cc", 
         ],
         include_dirs=[
             # Path to pybind11 headers
@@ -71,6 +75,7 @@ def has_flag(compiler, flagname):
     the specified compiler.
     """
     import tempfile
+
     with tempfile.NamedTemporaryFile('w', suffix='.cpp') as f:
         f.write('int main (int argc, char **argv) { return 0; }')
         try:
@@ -90,8 +95,9 @@ def cpp_flag(compiler):
     elif has_flag(compiler, '-std=c++11'):
         return '-std=c++11'
     else:
-        raise RuntimeError('Unsupported compiler -- at least C++11 support '
-                           'is needed!')
+        raise RuntimeError(
+            'Unsupported compiler -- at least C++11 support is needed!'
+            )
 
 
 class BuildExt(build_ext):

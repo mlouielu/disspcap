@@ -14,6 +14,7 @@
 #ifndef DISSPCAP_LIVE_CAPTURE_H
 #define DISSPCAP_LIVE_CAPTURE_H
 
+#include <stdexcept>
 #include <pcap.h>
 
 #include "packet.h"

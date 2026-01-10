@@ -1,20 +1,23 @@
 /**
  * @file packet.h
  * @author Daniel Uhricek (daniel.uhricek@gypri.cz)
- * @brief Contains packet related representations. 
+ * @brief Contains packet related representations.
  * @version 0.1
  * @date 2018-10-23
- * 
+ *
  * @copyright Copyright (c) 2018
  */
 
 #ifndef DISSPCAP_PACKET_H
 #define DISSPCAP_PACKET_H
 
+#include <chrono>
 #include <map>
 #include <memory>
 #include <string>
 
+#include "dca_config.h"
+#include "dca_raw.h"
 #include "dns.h"
 #include "ethernet.h"
 #include "http.h"
@@ -25,45 +28,54 @@
 #include "telnet.h"
 #include "udp.h"
 
-namespace disspcap {
+namespace disspcap
+{
 
 /**
  * @brief Class representing packet information (headers + data).
  */
-class Packet {
+class Packet
+{
 public:
-    Packet(uint8_t* data, unsigned int length);
+    Packet(uint8_t *data, unsigned int length);
+    Packet(uint8_t *data, unsigned int length, struct timeval ts);
     ~Packet();
     unsigned int length() const;
     unsigned int payload_length() const;
-    const Ethernet* ethernet() const;
-    const IPv4* ipv4() const;
-    const IPv6* ipv6() const;
-    const UDP* udp() const;
-    const TCP* tcp() const;
-    const DNS* dns() const;
-    const HTTP* http() const;
-    const IRC* irc() const;
-    const Telnet* telnet() const;
-    uint8_t* raw_data();
-    uint8_t* payload();
+    const Ethernet *ethernet() const;
+    const IPv4 *ipv4() const;
+    const IPv6 *ipv6() const;
+    const UDP *udp() const;
+    const TCP *tcp() const;
+    const DNS *dns() const;
+    const HTTP *http() const;
+    const IRC *irc() const;
+    const Telnet *telnet() const;
+    const DcaConfig *dca_config() const;
+    const DcaRaw *dca_raw() const;
+    const std::chrono::system_clock::time_point *ts() const;
+    uint8_t *raw_data();
+    uint8_t *payload();
 
 private:
     unsigned int length_;
     unsigned int payload_length_;
-    uint8_t* raw_data_;
-    uint8_t* payload_;
-    Ethernet* ethernet_;
-    IPv4* ipv4_;
-    IPv6* ipv6_;
-    UDP* udp_;
-    TCP* tcp_;
-    DNS* dns_;
-    HTTP* http_;
-    IRC* irc_;
-    Telnet* telnet_;
+    uint8_t *raw_data_;
+    std::chrono::system_clock::time_point ts_;
+    uint8_t *payload_;
+    Ethernet *ethernet_;
+    IPv4 *ipv4_;
+    IPv6 *ipv6_;
+    UDP *udp_;
+    TCP *tcp_;
+    DNS *dns_;
+    HTTP *http_;
+    IRC *irc_;
+    Telnet *telnet_;
+    DcaConfig *dca_config_;
+    DcaRaw *dca_raw_;
     void parse();
 };
-}
+}  // namespace disspcap
 
 #endif
